@@ -6,11 +6,27 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Briefcase, ChartBar, FileText, Megaphone } from "lucide-react";
 
 interface ProfileFormProps {
   userType: "student" | "company";
   onSubmit: (data: any) => void;
 }
+
+const internshipOptions = [
+  { value: "marketing", label: "Marketing", icon: <Megaphone className="mr-2" /> },
+  { value: "data_science", label: "Data Science", icon: <ChartBar className="mr-2" /> },
+  { value: "back_office", label: "Back Office", icon: <Briefcase className="mr-2" /> },
+  { value: "data_entry", label: "Data Entry", icon: <FileText className="mr-2" /> },
+];
 
 export function ProfileForm({ userType, onSubmit }: ProfileFormProps) {
   const [formData, setFormData] = useState({
@@ -21,12 +37,17 @@ export function ProfileForm({ userType, onSubmit }: ProfileFormProps) {
     skills: "",
     website: "",
     phone: "",
+    internshipType: "",
   });
 
   const { toast } = useToast();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -86,6 +107,32 @@ export function ProfileForm({ userType, onSubmit }: ProfileFormProps) {
                 value={formData.location}
                 onChange={handleChange}
               />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="internshipType">
+                {userType === "student" ? "Interested In" : "Looking For"}
+              </Label>
+              <Select 
+                value={formData.internshipType} 
+                onValueChange={(value) => handleSelectChange("internshipType", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select internship type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {internshipOptions.map(option => (
+                      <SelectItem key={option.value} value={option.value}>
+                        <div className="flex items-center">
+                          {option.icon}
+                          {option.label}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
             
             {userType === "student" ? (
