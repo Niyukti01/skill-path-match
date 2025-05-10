@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Briefcase, ChartBar, FileText, Megaphone } from "lucide-react";
+import { Briefcase, Code, Database } from "lucide-react";
 
 interface ProfileFormProps {
   userType: "student" | "company";
@@ -22,10 +22,18 @@ interface ProfileFormProps {
 }
 
 const internshipOptions = [
-  { value: "marketing", label: "Marketing", icon: <Megaphone className="mr-2" /> },
-  { value: "data_science", label: "Data Science", icon: <ChartBar className="mr-2" /> },
+  { value: "marketing", label: "Marketing", icon: <Briefcase className="mr-2" /> },
+  { value: "data_science", label: "Data Science", icon: <Database className="mr-2" /> },
   { value: "back_office", label: "Back Office", icon: <Briefcase className="mr-2" /> },
-  { value: "data_entry", label: "Data Entry", icon: <FileText className="mr-2" /> },
+  { value: "data_entry", label: "Data Entry", icon: <Database className="mr-2" /> },
+  { value: "web_development", label: "Web Development", icon: <Code className="mr-2" /> },
+  { value: "mobile_development", label: "Mobile App Development", icon: <Code className="mr-2" /> },
+  { value: "ui_ux_design", label: "UI/UX Design", icon: <Briefcase className="mr-2" /> },
+  { value: "software_testing", label: "Software Testing", icon: <Code className="mr-2" /> },
+  { value: "cyber_security", label: "Cyber Security", icon: <Database className="mr-2" /> },
+  { value: "cloud_computing", label: "Cloud Computing", icon: <Database className="mr-2" /> },
+  { value: "artificial_intelligence", label: "Artificial Intelligence", icon: <Database className="mr-2" /> },
+  { value: "machine_learning", label: "Machine Learning", icon: <Database className="mr-2" /> }
 ];
 
 export function ProfileForm({ userType, onSubmit }: ProfileFormProps) {
