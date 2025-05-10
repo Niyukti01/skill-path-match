@@ -17,7 +17,7 @@ const Index = () => {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold mb-4">How SkillPathMatch Works</h2>
+              <h2 className="text-3xl font-bold mb-4">How InternLink Works</h2>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
                 Our platform makes it easy for students to find internships and companies to find talented students.
               </p>
@@ -154,7 +154,7 @@ const Index = () => {
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Ready to Find Your Perfect Match?</h2>
             <p className="text-white/80 max-w-2xl mx-auto mb-10">
-              Join SkillPathMatch today and take the first step towards your next great opportunity.
+              Join InternLink today and take the first step towards your next great opportunity.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Button asChild size="lg" variant="secondary">
@@ -172,7 +172,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <p className="text-muted-foreground">© 2025 SkillPathMatch. All rights reserved.</p>
+              <p className="text-muted-foreground">© 2025 InternLink. All rights reserved.</p>
             </div>
             <div className="flex gap-6">
               <Link to="/" className="text-muted-foreground hover:text-primary">Home</Link>

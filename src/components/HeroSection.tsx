@@ -12,7 +12,7 @@ export function HeroSection() {
               Connecting <span className="gradient-text">Students</span> with <span className="gradient-text">Opportunities</span>
             </h1>
             <p className="text-lg text-gray-600 mb-8">
-              SkillPathMatch bridges the gap between talented students seeking internships and companies looking for fresh perspectives. Find your perfect match today.
+              InternLink bridges the gap between talented students seeking internships and companies looking for fresh perspectives. Find your perfect match today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button asChild size="lg" className="font-medium">

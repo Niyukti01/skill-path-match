@@ -12,9 +12,9 @@ export function Navbar() {
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="font-bold text-xl flex items-center gap-2">
           <div className="bg-primary rounded-md p-1">
-            <span className="text-white">SPM</span>
+            <span className="text-white">IL</span>
           </div>
-          <span className="hidden sm:inline">SkillPathMatch</span>
+          <span className="hidden sm:inline">InternLink</span>
         </Link>
         
         {/* Mobile Menu Button */}
