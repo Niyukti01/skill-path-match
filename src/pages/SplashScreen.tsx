@@ -19,8 +19,8 @@ const SplashScreen = () => {
       // Finally navigate to the home page
       setTimeout(() => {
         navigate('/home');
-      }, 500);
-    }, 1000); // Wait for logo animation to complete
+      }, 800); // Extended for smoother transition
+    }, 1200); // Extended for smoother logo expansion
   };
 
   return (
@@ -28,14 +28,14 @@ const SplashScreen = () => {
       {/* Logo overlay that expands to cover the screen */}
       {isLogoExpanding && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className={`bg-primary rounded-xl transition-all duration-1000 ease-in-out flex items-center justify-center text-white font-bold
+          <div className={`bg-primary rounded-xl transition-all duration-1500 ease-out flex items-center justify-center text-white font-bold
             ${isLogoExpanding ? 'scale-[20] opacity-100' : 'scale-1 opacity-0'}`}>
             <span className="text-4xl md:text-6xl">IL</span>
           </div>
         </div>
       )}
       
-      <div className={`flex flex-col items-center transition-all duration-500 ${isAnimating ? 'scale-95 opacity-0' : 'scale-100'}`}>
+      <div className={`flex flex-col items-center transition-all duration-800 ease-in-out ${isAnimating ? 'scale-95 opacity-0' : 'scale-100'}`}>
         <div className="mb-8 relative">
           <div className="absolute -left-6 -top-6 w-20 h-20 bg-accent/20 rounded-full blur-xl"></div>
           <div className="absolute -right-8 -bottom-8 w-24 h-24 bg-primary/20 rounded-full blur-xl"></div>
@@ -59,7 +59,7 @@ const SplashScreen = () => {
         <Button 
           onClick={handleProceed} 
           size="lg" 
-          className="px-12 text-lg font-medium"
+          className="px-12 text-lg font-medium transition-all hover:scale-105 duration-300"
         >
           Proceed
         </Button>
