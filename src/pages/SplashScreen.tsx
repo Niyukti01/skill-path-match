@@ -5,15 +5,52 @@ import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { format, differenceInYears } from "date-fns";
+import { Input } from "@/components/ui/input";
+import { format, differenceInYears, parse, isValid } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
 
 const SplashScreen = () => {
   const navigate = useNavigate();
   const [date, setDate] = useState<Date | undefined>();
+  const [dateInputValue, setDateInputValue] = useState("");
   const [showDialog, setShowDialog] = useState(false);
   const [errorDialog, setErrorDialog] = useState(false);
+  const [inputError, setInputError] = useState("");
+
+  const handleDateInput = (value: string) => {
+    setDateInputValue(value);
+    
+    // Try to parse the date
+    try {
+      // Accept formats like YYYY-MM-DD or MM/DD/YYYY
+      let parsedDate: Date | undefined;
+      
+      if (value.includes("-")) {
+        parsedDate = parse(value, "yyyy-MM-dd", new Date());
+      } else if (value.includes("/")) {
+        parsedDate = parse(value, "MM/dd/yyyy", new Date());
+      }
+      
+      if (parsedDate && isValid(parsedDate)) {
+        setDate(parsedDate);
+        setInputError("");
+      } else if (value !== "") {
+        setInputError("Please enter a valid date (YYYY-MM-DD or MM/DD/YYYY)");
+      } else {
+        setInputError("");
+        setDate(undefined);
+      }
+    } catch (error) {
+      if (value !== "") {
+        setInputError("Please enter a valid date (YYYY-MM-DD or MM/DD/YYYY)");
+      } else {
+        setInputError("");
+        setDate(undefined);
+      }
+    }
+  };
 
   const handleProceed = () => {
     if (!date) {
@@ -53,38 +90,55 @@ const SplashScreen = () => {
           Connect with the perfect internship opportunities tailored for you
         </p>
         
-        <div className="space-y-6">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-full md:w-[280px] pl-3 text-left font-normal flex justify-between",
-                  !date && "text-muted-foreground"
-                )}
-              >
-                {date ? format(date, "PPP") : <span>Select your date of birth</span>}
-                <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="center">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                disabled={(date) =>
-                  date > new Date() || date < new Date("1900-01-01")
-                }
-                initialFocus
-                className={cn("p-3 pointer-events-auto")}
+        <div className="w-full max-w-md px-4 space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="dob">Date of Birth</Label>
+            <div className="flex gap-2">
+              <Input
+                id="dob"
+                placeholder="YYYY-MM-DD"
+                value={dateInputValue}
+                onChange={(e) => handleDateInput(e.target.value)}
+                className="flex-grow"
               />
-            </PopoverContent>
-          </Popover>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant={"outline"} size="icon" className="px-2">
+                    <CalendarIcon className="h-5 w-5" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="end">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={(newDate) => {
+                      setDate(newDate);
+                      if (newDate) {
+                        setDateInputValue(format(newDate, "yyyy-MM-dd"));
+                        setInputError("");
+                      }
+                    }}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date("1900-01-01")
+                    }
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto")}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            {inputError && <p className="text-sm text-destructive">{inputError}</p>}
+            {date && (
+              <p className="text-sm text-muted-foreground">
+                Age: {differenceInYears(new Date(), date)} years
+              </p>
+            )}
+          </div>
           
           <Button 
             onClick={handleProceed} 
             size="lg" 
-            className="w-full md:w-[280px] px-12 text-lg font-medium"
+            className="w-full px-12 text-lg font-medium"
           >
             Proceed
           </Button>
