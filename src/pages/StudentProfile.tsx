@@ -5,9 +5,19 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { differenceInYears } from "date-fns";
 import { toast } from "@/components/ui/sonner";
+import { useState } from "react";
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 
 const StudentProfile = () => {
   const navigate = useNavigate();
+  const [showApplications, setShowApplications] = useState(false);
+
+  // Mock data for applications
+  const applications = [
+    { id: 1, company: "Tech Innovations", position: "Frontend Developer Intern", status: "In Review", appliedDate: "2025-04-28" },
+    { id: 2, company: "DataViz Corp", position: "Data Science Intern", status: "Interview Scheduled", appliedDate: "2025-04-20" },
+    { id: 3, company: "CreativeWorks", position: "UI/UX Design Intern", status: "Applied", appliedDate: "2025-05-05" },
+  ];
 
   const handleSubmit = (data: any) => {
     console.log("Student profile data:", data);
@@ -33,6 +43,10 @@ const StudentProfile = () => {
     navigate("/dashboard/student");
   };
 
+  const toggleApplications = () => {
+    setShowApplications(!showApplications);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-yellow-50 to-white">
       <Navbar />
@@ -56,14 +70,64 @@ const StudentProfile = () => {
                   >
                     Skip for Now
                   </Button>
-                  <Button 
-                    type="submit" 
-                    form="profile-form"
-                    className="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600"
-                  >
-                    Save and Continue
-                  </Button>
+                  <div className="space-x-3">
+                    <Button 
+                      variant="outline"
+                      onClick={toggleApplications}
+                      className="border-amber-400 text-amber-700 hover:bg-amber-50"
+                    >
+                      {showApplications ? "Hide Applications" : "View Applications"}
+                    </Button>
+                    <Button 
+                      type="submit" 
+                      form="profile-form"
+                      className="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600"
+                    >
+                      Save and Continue
+                    </Button>
+                  </div>
                 </div>
+                
+                {showApplications && (
+                  <div className="mt-6 p-4 bg-amber-50 rounded-lg border border-amber-200">
+                    <h2 className="text-xl font-semibold text-amber-800 mb-4">Your Applications</h2>
+                    
+                    {applications.length > 0 ? (
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Company</TableHead>
+                            <TableHead>Position</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead>Applied Date</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {applications.map((app) => (
+                            <TableRow key={app.id}>
+                              <TableCell className="font-medium">{app.company}</TableCell>
+                              <TableCell>{app.position}</TableCell>
+                              <TableCell>
+                                <span className={`px-2 py-1 rounded-full text-xs ${
+                                  app.status === "In Review" 
+                                    ? "bg-amber-100 text-amber-800" 
+                                    : app.status === "Interview Scheduled" 
+                                      ? "bg-green-100 text-green-800"
+                                      : "bg-gray-100 text-gray-800"
+                                }`}>
+                                  {app.status}
+                                </span>
+                              </TableCell>
+                              <TableCell>{app.appliedDate}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    ) : (
+                      <p className="text-center text-amber-600 py-4">You haven't submitted any applications yet.</p>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
