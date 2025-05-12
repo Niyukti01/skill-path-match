@@ -1,14 +1,25 @@
-
 import { Navbar } from "@/components/Navbar";
 import { ProfileForm } from "@/components/ProfileForm";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { differenceInYears } from "date-fns";
 
 const StudentProfile = () => {
   const navigate = useNavigate();
 
   const handleSubmit = (data: any) => {
     console.log("Student profile data:", data);
+    
+    // Check if user is 18+ based on date of birth
+    if (data.dob) {
+      const age = differenceInYears(new Date(), data.dob);
+      if (age < 18) {
+        // Show error or handle underage users
+        alert("You must be at least 18 years old to use InternLink.");
+        return;
+      }
+    }
+    
     // In a real app, we would save the data to a backend
     navigate("/dashboard/student");
   };
