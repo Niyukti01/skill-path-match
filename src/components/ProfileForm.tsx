@@ -6,6 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -14,7 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Briefcase, Code, Database } from "lucide-react";
+import { Briefcase, Code, Database, Calendar as CalendarLucide, GraduationCap, School } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ProfileFormProps {
   userType: "student" | "company";
@@ -36,6 +41,17 @@ const internshipOptions = [
   { value: "machine_learning", label: "Machine Learning", icon: <Database className="mr-2" /> }
 ];
 
+const qualificationOptions = [
+  { value: "high_school", label: "High School", icon: <School className="mr-2" /> },
+  { value: "associates", label: "Associate's Degree", icon: <GraduationCap className="mr-2" /> },
+  { value: "bachelors", label: "Bachelor's Degree", icon: <GraduationCap className="mr-2" /> },
+  { value: "masters", label: "Master's Degree", icon: <GraduationCap className="mr-2" /> },
+  { value: "phd", label: "PhD", icon: <GraduationCap className="mr-2" /> },
+  { value: "certification", label: "Professional Certification", icon: <School className="mr-2" /> },
+  { value: "diploma", label: "Diploma", icon: <School className="mr-2" /> },
+  { value: "other", label: "Other", icon: <School className="mr-2" /> }
+];
+
 export function ProfileForm({ userType, onSubmit }: ProfileFormProps) {
   const [formData, setFormData] = useState({
     name: "",
@@ -46,6 +62,8 @@ export function ProfileForm({ userType, onSubmit }: ProfileFormProps) {
     website: "",
     phone: "",
     internshipType: "",
+    dob: undefined as Date | undefined,
+    qualification: ""
   });
 
   const { toast } = useToast();
@@ -57,6 +75,10 @@ export function ProfileForm({ userType, onSubmit }: ProfileFormProps) {
 
   const handleSelectChange = (name: string, value: string) => {
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleDateChange = (date: Date | undefined) => {
+    setFormData(prev => ({ ...prev, dob: date }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -71,7 +93,7 @@ export function ProfileForm({ userType, onSubmit }: ProfileFormProps) {
   return (
     <Card className="w-full">
       <CardContent className="pt-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form id="profile-form" onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="name">{userType === "student" ? "Full Name" : "Company Name"}</Label>
@@ -96,6 +118,40 @@ export function ProfileForm({ userType, onSubmit }: ProfileFormProps) {
                 required
               />
             </div>
+            
+            {userType === "student" && (
+              <div className="space-y-2">
+                <Label htmlFor="dob">Date of Birth</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      id="dob"
+                      variant={"outline"}
+                      className={cn(
+                        "w-full pl-3 text-left font-normal flex justify-between items-center",
+                        !formData.dob && "text-muted-foreground"
+                      )}
+                    >
+                      {formData.dob ? format(formData.dob, "PPP") : <span>Select your date of birth</span>}
+                      <CalendarIcon className="ml-2 h-4 w-4" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={formData.dob}
+                      onSelect={handleDateChange}
+                      disabled={(date) =>
+                        date > new Date() || date < new Date("1900-01-01")
+                      }
+                      initialFocus
+                      className={cn("p-3 pointer-events-auto")}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+            )}
+            
             <div className="space-y-2">
               <Label htmlFor="phone">Phone</Label>
               <Input 
@@ -144,16 +200,41 @@ export function ProfileForm({ userType, onSubmit }: ProfileFormProps) {
             </div>
             
             {userType === "student" ? (
-              <div className="space-y-2">
-                <Label htmlFor="skills">Skills (comma separated)</Label>
-                <Input 
-                  id="skills" 
-                  name="skills"
-                  placeholder="React, TypeScript, Design..." 
-                  value={formData.skills}
-                  onChange={handleChange}
-                />
-              </div>
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="qualification">Last Qualification</Label>
+                  <Select 
+                    value={formData.qualification} 
+                    onValueChange={(value) => handleSelectChange("qualification", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select qualification" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {qualificationOptions.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            <div className="flex items-center">
+                              {option.icon}
+                              {option.label}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="skills">Skills (comma separated)</Label>
+                  <Input 
+                    id="skills" 
+                    name="skills"
+                    placeholder="React, TypeScript, Design..." 
+                    value={formData.skills}
+                    onChange={handleChange}
+                  />
+                </div>
+              </>
             ) : (
               <div className="space-y-2">
                 <Label htmlFor="website">Website</Label>
