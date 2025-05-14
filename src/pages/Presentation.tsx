@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, ExternalLink, Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +7,26 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 const Presentation = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
+  
+  // Add keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        nextSlide();
+      } else if (e.key === "ArrowLeft") {
+        prevSlide();
+      } else if (e.key === "Escape") {
+        goHome();
+      }
+    };
+    
+    window.addEventListener("keydown", handleKeyDown);
+    
+    // Cleanup event listener
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [currentSlide]); // Re-run effect when currentSlide changes
   
   const slides = [
     // Title Slide
@@ -141,6 +160,11 @@ const Presentation = () => {
       {/* Presentation container */}
       <div className="flex-grow flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-5xl bg-white rounded-lg shadow-xl overflow-hidden">
+          {/* Keyboard navigation hint */}
+          <div className="absolute top-20 left-4 bg-black/10 text-black/70 px-3 py-1 rounded-md text-sm backdrop-blur-sm">
+            Use ← → keys to navigate slides
+          </div>
+          
           {/* Slide content */}
           <div className="relative">
             {slides[currentSlide].image && (
