@@ -1,3 +1,4 @@
+
 # Welcome to your Lovable project
 
 ## Project info
@@ -59,6 +60,16 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+
+## Project Features
+
+- **InternLink Platform**: A web application connecting students with internship opportunities
+- **Student Profiles**: Students can create profiles showcasing their skills and interests
+- **Company Listings**: Companies can post internship opportunities
+- **Interactive Matching**: Algorithm connects students with relevant opportunities
+- **Responsive Design**: Works on mobile, tablet, and desktop devices
+- **PWA Support**: Can be installed as a Progressive Web App
+- **Presentation Mode**: View a slide presentation about the project at `/presentation`
 
 ## How can I deploy this project?
 

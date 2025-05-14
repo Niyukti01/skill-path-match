@@ -11,6 +11,7 @@ import CompanyProfile from "./pages/CompanyProfile";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./pages/SplashScreen";
+import Presentation from "./pages/Presentation";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/profile/student" element={<StudentProfile />} />
           <Route path="/profile/company" element={<CompanyProfile />} />
           <Route path="/dashboard/:userType" element={<Dashboard />} />
+          <Route path="/presentation" element={<Presentation />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
