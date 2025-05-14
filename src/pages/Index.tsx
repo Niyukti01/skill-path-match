@@ -1,10 +1,9 @@
-
 import { HeroSection } from "@/components/HeroSection";
 import { Navbar } from "@/components/Navbar";
 import { FeatureCard } from "@/components/FeatureCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Search, User, Building2, Briefcase, LineChart, Presentation } from "lucide-react";
+import { Search, User, Building2, Briefcase, LineChart } from "lucide-react";
 
 const Index = () => {
   return (
@@ -21,9 +20,6 @@ const Index = () => {
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
                 Our platform makes it easy for students to find internships and companies to find talented students.
               </p>
-              <Button asChild className="mt-6 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600">
-                <Link to="/presentation"><Presentation className="mr-2 h-4 w-4" /> View Presentation</Link>
-              </Button>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -181,7 +177,6 @@ const Index = () => {
               <Link to="/" className="text-muted-foreground hover:text-primary">Home</Link>
               <Link to="/about" className="text-muted-foreground hover:text-primary">About</Link>
               <Link to="/login" className="text-muted-foreground hover:text-primary">Login</Link>
-              <Link to="/presentation" className="text-muted-foreground hover:text-primary">Presentation</Link>
             </div>
           </div>
         </div>
