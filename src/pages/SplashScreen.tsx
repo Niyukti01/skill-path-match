@@ -3,15 +3,11 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Download, Package, Apple, Monitor, Smartphone } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 
 const SplashScreen = () => {
   const navigate = useNavigate();
   const [showDialog, setShowDialog] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isInstallable, setIsInstallable] = useState(false);
-  const [showDownloadOptions, setShowDownloadOptions] = useState(false);
   const [particles, setParticles] = useState<Array<{id: number, x: number, y: number, size: number, color: string}>>([]);
 
   useEffect(() => {
@@ -27,71 +23,10 @@ const SplashScreen = () => {
       });
     }
     setParticles(newParticles);
-
-    // Check if app is installable
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setIsInstallable(true);
-    });
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', (e) => {
-        setDeferredPrompt(null);
-      });
-    };
   }, []);
 
   const handleProceed = () => {
     navigate('/home');
-  };
-
-  const handleInstall = async () => {
-    if (!deferredPrompt) {
-      if ('serviceWorker' in navigator && window.matchMedia('(display-mode: browser)').matches) {
-        // If we have service worker but no install prompt, provide manual instructions
-        setShowDialog(true);
-      } else {
-        toast("This app cannot be installed right now", {
-          description: "Try using a supported browser or device",
-          duration: 5000,
-        });
-      }
-      return;
-    }
-    
-    try {
-      deferredPrompt.prompt();
-      const choiceResult = await deferredPrompt.userChoice;
-      
-      if (choiceResult.outcome === 'accepted') {
-        toast("Thank you for installing InternLink!", {
-          description: "You can now access the app from your home screen",
-          duration: 5000,
-        });
-        setIsInstallable(false);
-      } 
-      
-      setDeferredPrompt(null);
-    } catch (error) {
-      console.error('Installation failed:', error);
-      setShowDialog(true);
-    }
-  };
-
-  const toggleDownloadOptions = () => {
-    setShowDownloadOptions(!showDownloadOptions);
-  };
-
-  const handlePlatformInstall = (platform: string) => {
-    // Show platform-specific instructions
-    setShowDialog(true);
-    
-    // For analytics or tracking purposes
-    toast(`Starting download for ${platform}`, {
-      description: `InternLink for ${platform} is being prepared.`,
-      duration: 3000,
-    });
   };
 
   return (
@@ -141,99 +76,8 @@ const SplashScreen = () => {
           >
             Proceed
           </Button>
-          
-          <Button 
-            onClick={toggleDownloadOptions}
-            variant="outline" 
-            size="lg" 
-            className="w-full px-12 text-lg font-medium border-amber-400 hover:bg-amber-50"
-          >
-            <Download className="mr-2" /> Download App
-          </Button>
-
-          {showDownloadOptions && (
-            <div className="bg-white rounded-lg shadow-lg p-4 space-y-3 animate-in fade-in-50 slide-in-from-top-5">
-              <h3 className="font-medium text-lg text-center mb-2">Choose your platform</h3>
-              
-              {isInstallable && (
-                <Button 
-                  onClick={handleInstall}
-                  variant="outline" 
-                  className="w-full justify-start border-amber-300"
-                >
-                  <Smartphone className="mr-2 h-5 w-5" /> Install as Web App
-                </Button>
-              )}
-              
-              <Button 
-                onClick={() => handlePlatformInstall("Android")}
-                variant="outline" 
-                className="w-full justify-start border-green-300"
-              >
-                <Smartphone className="mr-2 h-5 w-5" /> Download for Android
-              </Button>
-              
-              <Button 
-                onClick={() => handlePlatformInstall("iOS")}
-                variant="outline" 
-                className="w-full justify-start border-blue-300"
-              >
-                <Apple className="mr-2 h-5 w-5" /> Download for iOS
-              </Button>
-              
-              <Button 
-                onClick={() => handlePlatformInstall("Desktop")}
-                variant="outline" 
-                className="w-full justify-start border-gray-300"
-              >
-                <Monitor className="mr-2 h-5 w-5" /> Download for Desktop
-              </Button>
-            </div>
-          )}
         </div>
       </div>
-
-      {/* Installation Instructions Dialog */}
-      <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Install InternLink App</DialogTitle>
-            <DialogDescription className="pt-2">
-              Follow these steps to install the app on your device:
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
-            <div>
-              <h4 className="font-medium text-sm">For iOS:</h4>
-              <ol className="text-sm mt-1 space-y-1 list-decimal pl-4">
-                <li>Tap the Share icon in Safari</li>
-                <li>Scroll down and tap "Add to Home Screen"</li>
-                <li>Tap "Add" to confirm</li>
-              </ol>
-            </div>
-            
-            <div>
-              <h4 className="font-medium text-sm">For Android:</h4>
-              <ol className="text-sm mt-1 space-y-1 list-decimal pl-4">
-                <li>Open Chrome menu (three dots)</li>
-                <li>Tap "Install app" or "Add to Home screen"</li>
-                <li>Follow the on-screen instructions</li>
-              </ol>
-            </div>
-            
-            <div>
-              <h4 className="font-medium text-sm">For Desktop:</h4>
-              <ol className="text-sm mt-1 space-y-1 list-decimal pl-4">
-                <li>In Chrome or Edge, click the install icon in the address bar</li>
-                <li>Click "Install" when prompted</li>
-              </ol>
-            </div>
-          </div>
-          <div className="flex justify-end">
-            <Button onClick={() => setShowDialog(false)}>Close</Button>
-          </div>
-        </DialogContent>
-      </Dialog>
 
       <style>
         {`
