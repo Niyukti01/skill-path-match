@@ -196,7 +196,8 @@ const SplashScreen = () => {
         </DialogContent>
       </Dialog>
 
-      <style jsx global>{`
+      <style>
+        {`
         @keyframes float {
           0% { transform: translateY(0px) translateX(0px); }
           50% { transform: translateY(-20px) translateX(10px); }
@@ -239,7 +240,8 @@ const SplashScreen = () => {
           0% { transform: translateX(-100%) rotate(30deg); }
           100% { transform: translateX(100%) rotate(30deg); }
         }
-      `}</style>
+      `}
+      </style>
     </div>
   );
 };
