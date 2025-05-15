@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Download, Package } from "lucide-react";
+import { Download, Package, Apple, Monitor, Smartphone } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
 
 const SplashScreen = () => {
@@ -11,6 +11,7 @@ const SplashScreen = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstallable, setIsInstallable] = useState(false);
+  const [showDownloadOptions, setShowDownloadOptions] = useState(false);
   const [particles, setParticles] = useState<Array<{id: number, x: number, y: number, size: number, color: string}>>([]);
 
   useEffect(() => {
@@ -68,6 +69,19 @@ const SplashScreen = () => {
     setDeferredPrompt(null);
   };
 
+  const toggleDownloadOptions = () => {
+    setShowDownloadOptions(!showDownloadOptions);
+  };
+
+  const handlePlatformInstall = (platform: string) => {
+    // This would ideally link to platform-specific app stores or instructions
+    // For now, we'll just show toast notifications
+    toast(`Download for ${platform}`, {
+      description: `InternLink for ${platform} would begin downloading now.`,
+      duration: 5000,
+    });
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-secondary to-background overflow-hidden relative">
       {/* Decorative floating elements */}
@@ -116,20 +130,58 @@ const SplashScreen = () => {
             Proceed
           </Button>
           
-          {isInstallable && (
-            <Button 
-              onClick={handleInstall}
-              variant="outline" 
-              size="lg" 
-              className="w-full px-12 text-lg font-medium border-amber-400 hover:bg-amber-50"
-            >
-              <Download className="mr-2" /> Install App
-            </Button>
+          <Button 
+            onClick={toggleDownloadOptions}
+            variant="outline" 
+            size="lg" 
+            className="w-full px-12 text-lg font-medium border-amber-400 hover:bg-amber-50"
+          >
+            <Download className="mr-2" /> Download App
+          </Button>
+
+          {showDownloadOptions && (
+            <div className="bg-white rounded-lg shadow-lg p-4 space-y-3 animate-in fade-in-50 slide-in-from-top-5">
+              <h3 className="font-medium text-lg text-center mb-2">Choose your platform</h3>
+              
+              {isInstallable && (
+                <Button 
+                  onClick={handleInstall}
+                  variant="outline" 
+                  className="w-full justify-start border-amber-300"
+                >
+                  <Smartphone className="mr-2 h-5 w-5" /> Install as Web App
+                </Button>
+              )}
+              
+              <Button 
+                onClick={() => handlePlatformInstall("Android")}
+                variant="outline" 
+                className="w-full justify-start border-green-300"
+              >
+                <Smartphone className="mr-2 h-5 w-5" /> Download for Android
+              </Button>
+              
+              <Button 
+                onClick={() => handlePlatformInstall("iOS")}
+                variant="outline" 
+                className="w-full justify-start border-blue-300"
+              >
+                <Apple className="mr-2 h-5 w-5" /> Download for iOS
+              </Button>
+              
+              <Button 
+                onClick={() => handlePlatformInstall("Desktop")}
+                variant="outline" 
+                className="w-full justify-start border-gray-300"
+              >
+                <Monitor className="mr-2 h-5 w-5" /> Download for Desktop
+              </Button>
+            </div>
           )}
         </div>
       </div>
 
-      {/* Age verification dialog - removed as per user request */}
+      {/* Dialog */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent>
           <DialogHeader>
@@ -143,6 +195,51 @@ const SplashScreen = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      <style jsx global>{`
+        @keyframes float {
+          0% { transform: translateY(0px) translateX(0px); }
+          50% { transform: translateY(-20px) translateX(10px); }
+          100% { transform: translateY(0px) translateX(0px); }
+        }
+        
+        .floating-element {
+          animation: float 6s ease-in-out infinite;
+        }
+        
+        .gradient-text {
+          background: linear-gradient(to right, #f59e0b, #fbbf24);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        
+        .shine-effect {
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .shine-effect::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 0%,
+            rgba(255,255,255,0.1) 50%,
+            rgba(255,255,255,0) 100%
+          );
+          transform: rotate(30deg);
+          animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+          0% { transform: translateX(-100%) rotate(30deg); }
+          100% { transform: translateX(100%) rotate(30deg); }
+        }
+      `}</style>
     </div>
   );
 };
