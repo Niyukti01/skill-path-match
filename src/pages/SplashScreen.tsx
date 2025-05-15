@@ -48,25 +48,35 @@ const SplashScreen = () => {
 
   const handleInstall = async () => {
     if (!deferredPrompt) {
-      toast("This app cannot be installed right now", {
-        description: "Try using a supported browser or device",
-        duration: 5000,
-      });
+      if ('serviceWorker' in navigator && window.matchMedia('(display-mode: browser)').matches) {
+        // If we have service worker but no install prompt, provide manual instructions
+        setShowDialog(true);
+      } else {
+        toast("This app cannot be installed right now", {
+          description: "Try using a supported browser or device",
+          duration: 5000,
+        });
+      }
       return;
     }
     
-    deferredPrompt.prompt();
-    const choiceResult = await deferredPrompt.userChoice;
-    
-    if (choiceResult.outcome === 'accepted') {
-      toast("Thank you for installing InternLink!", {
-        description: "You can now access the app from your home screen",
-        duration: 5000,
-      });
-      setIsInstallable(false);
-    } 
-    
-    setDeferredPrompt(null);
+    try {
+      deferredPrompt.prompt();
+      const choiceResult = await deferredPrompt.userChoice;
+      
+      if (choiceResult.outcome === 'accepted') {
+        toast("Thank you for installing InternLink!", {
+          description: "You can now access the app from your home screen",
+          duration: 5000,
+        });
+        setIsInstallable(false);
+      } 
+      
+      setDeferredPrompt(null);
+    } catch (error) {
+      console.error('Installation failed:', error);
+      setShowDialog(true);
+    }
   };
 
   const toggleDownloadOptions = () => {
@@ -74,11 +84,13 @@ const SplashScreen = () => {
   };
 
   const handlePlatformInstall = (platform: string) => {
-    // This would ideally link to platform-specific app stores or instructions
-    // For now, we'll just show toast notifications
-    toast(`Download for ${platform}`, {
-      description: `InternLink for ${platform} would begin downloading now.`,
-      duration: 5000,
+    // Show platform-specific instructions
+    setShowDialog(true);
+    
+    // For analytics or tracking purposes
+    toast(`Starting download for ${platform}`, {
+      description: `InternLink for ${platform} is being prepared.`,
+      duration: 3000,
     });
   };
 
@@ -181,17 +193,44 @@ const SplashScreen = () => {
         </div>
       </div>
 
-      {/* Dialog */}
+      {/* Installation Instructions Dialog */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
-        <DialogContent>
+        <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Welcome to InternLink</DialogTitle>
-            <DialogDescription>
-              Please click OK to continue to InternLink.
+            <DialogTitle>Install InternLink App</DialogTitle>
+            <DialogDescription className="pt-2">
+              Follow these steps to install the app on your device:
             </DialogDescription>
           </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div>
+              <h4 className="font-medium text-sm">For iOS:</h4>
+              <ol className="text-sm mt-1 space-y-1 list-decimal pl-4">
+                <li>Tap the Share icon in Safari</li>
+                <li>Scroll down and tap "Add to Home Screen"</li>
+                <li>Tap "Add" to confirm</li>
+              </ol>
+            </div>
+            
+            <div>
+              <h4 className="font-medium text-sm">For Android:</h4>
+              <ol className="text-sm mt-1 space-y-1 list-decimal pl-4">
+                <li>Open Chrome menu (three dots)</li>
+                <li>Tap "Install app" or "Add to Home screen"</li>
+                <li>Follow the on-screen instructions</li>
+              </ol>
+            </div>
+            
+            <div>
+              <h4 className="font-medium text-sm">For Desktop:</h4>
+              <ol className="text-sm mt-1 space-y-1 list-decimal pl-4">
+                <li>In Chrome or Edge, click the install icon in the address bar</li>
+                <li>Click "Install" when prompted</li>
+              </ol>
+            </div>
+          </div>
           <div className="flex justify-end">
-            <Button onClick={() => setShowDialog(false)}>OK</Button>
+            <Button onClick={() => setShowDialog(false)}>Close</Button>
           </div>
         </DialogContent>
       </Dialog>
