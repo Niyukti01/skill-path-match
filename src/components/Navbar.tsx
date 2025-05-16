@@ -8,13 +8,13 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="border-b bg-white w-full py-4">
+    <nav className="border-b bg-white w-full py-4 shadow-sm">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/home" className="font-bold text-xl flex items-center gap-2">
-          <div className="bg-primary rounded-md p-1">
-            <span className="text-white">NA</span>
+          <div className="bg-primary rounded-md p-1 shadow-sm">
+            <span className="text-white">IL</span>
           </div>
-          <span className="hidden sm:inline">NewAppName</span>
+          <span className="hidden sm:inline">InternLink</span>
         </Link>
         
         {/* Mobile Menu Button */}
@@ -27,13 +27,13 @@ export function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6">
-          <Link to="/home" className="text-gray-600 hover:text-primary">Home</Link>
-          <Link to="/about" className="text-gray-600 hover:text-primary">How It Works</Link>
+          <Link to="/home" className="text-gray-600 hover:text-primary transition-colors">Home</Link>
+          <Link to="/about" className="text-gray-600 hover:text-primary transition-colors">How It Works</Link>
           <div className="flex items-center gap-4">
-            <Button asChild variant="outline" className="font-medium">
+            <Button asChild variant="outline" className="font-medium shadow-sm">
               <Link to="/login">Log in</Link>
             </Button>
-            <Button asChild className="font-medium">
+            <Button asChild className="font-medium shadow-sm">
               <Link to="/login?register=true">Sign up</Link>
             </Button>
           </div>
@@ -41,17 +41,17 @@ export function Navbar() {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="absolute top-16 left-0 right-0 bg-white shadow-md z-50 p-4 md:hidden flex flex-col gap-4">
+          <div className="absolute top-16 left-0 right-0 bg-white shadow-md z-50 p-4 md:hidden flex flex-col gap-4 animate-fade-in">
             <Link 
               to="/home" 
-              className="block py-2 text-gray-600 hover:text-primary"
+              className="block py-2 text-gray-600 hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Home
             </Link>
             <Link 
               to="/about" 
-              className="block py-2 text-gray-600 hover:text-primary"
+              className="block py-2 text-gray-600 hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
             >
               How It Works
@@ -59,14 +59,14 @@ export function Navbar() {
             <Button 
               asChild 
               variant="outline" 
-              className="w-full font-medium"
+              className="w-full font-medium shadow-sm"
               onClick={() => setIsOpen(false)}
             >
               <Link to="/login">Log in</Link>
             </Button>
             <Button 
               asChild 
-              className="w-full font-medium"
+              className="w-full font-medium shadow-sm"
               onClick={() => setIsOpen(false)}
             >
               <Link to="/login?register=true">Sign up</Link>

@@ -1,7 +1,7 @@
 
 {
-  "name": "NewAppName",
-  "short_name": "NewAppName",
+  "name": "InternLink",
+  "short_name": "InternLink",
   "description": "Connect with the perfect internship opportunities tailored for you",
   "start_url": "/",
   "display": "standalone",

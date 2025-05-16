@@ -15,10 +15,10 @@ export function HeroSection() {
               InternLink bridges the gap between talented students seeking internships and companies looking for fresh perspectives. Find your perfect match today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button asChild size="lg" className="font-medium">
+              <Button asChild size="lg" className="font-medium shadow-md hover:shadow-lg transition-shadow">
                 <Link to="/login?register=true&type=student">I'm a Student</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="font-medium">
+              <Button asChild size="lg" variant="outline" className="font-medium shadow-sm hover:shadow-md transition-shadow">
                 <Link to="/login?register=true&type=company">I'm a Company</Link>
               </Button>
             </div>
@@ -30,7 +30,7 @@ export function HeroSection() {
               <img 
                 src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b" 
                 alt="Students and mentors collaborating" 
-                className="rounded-lg shadow-2xl w-full object-cover"
+                className="rounded-lg shadow-2xl w-full object-cover hover:scale-[1.01] transition-transform duration-500 ease-in-out"
               />
             </div>
           </div>

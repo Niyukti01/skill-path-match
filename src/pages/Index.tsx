@@ -24,7 +24,7 @@ const Index = () => {
               onClick={() => setShowDownloadDialog(true)} 
               variant="default" 
               size="lg"
-              className="font-medium flex gap-2 items-center"
+              className="font-medium flex gap-2 items-center shadow-md hover:shadow-lg transition-all"
             >
               <Download size={18} />
               Download App
@@ -36,9 +36,9 @@ const Index = () => {
         <Dialog open={showDownloadDialog} onOpenChange={setShowDownloadDialog}>
           <DialogContent className="max-w-md">
             <DialogHeader>
-              <DialogTitle>Download NewAppName App</DialogTitle>
+              <DialogTitle>Download InternLink App</DialogTitle>
               <DialogDescription>
-                Follow the steps below to download NewAppName on your device.
+                Follow the steps below to download InternLink on your device.
               </DialogDescription>
             </DialogHeader>
             
@@ -48,7 +48,7 @@ const Index = () => {
                 <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
                   <li>Look for the install icon in the address bar (screen with down arrow)</li>
                   <li>Click on the install icon</li>
-                  <li>Follow the prompts to install NewAppName</li>
+                  <li>Follow the prompts to install InternLink</li>
                 </ol>
               </div>
               
@@ -115,7 +115,7 @@ const Index = () => {
                   <img 
                     src="https://images.unsplash.com/photo-1519389950473-47ba0277781c" 
                     alt="Students networking" 
-                    className="rounded-lg shadow-lg w-full"
+                    className="rounded-lg shadow-lg w-full hover:scale-[1.01] transition-transform duration-500 ease-in-out"
                   />
                 </div>
               </div>
@@ -150,7 +150,7 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
-                <Button asChild size="lg">
+                <Button asChild size="lg" className="shadow-md hover:shadow-lg transition-shadow">
                   <Link to="/login?register=true&type=student">Get Started as a Student</Link>
                 </Button>
               </div>
@@ -193,7 +193,7 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
-                <Button asChild size="lg" variant="outline">
+                <Button asChild size="lg" variant="outline" className="shadow-sm hover:shadow-md transition-shadow">
                   <Link to="/login?register=true&type=company">Get Started as a Company</Link>
                 </Button>
               </div>
@@ -203,7 +203,7 @@ const Index = () => {
                   <img 
                     src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" 
                     alt="Company recruiting" 
-                    className="rounded-lg shadow-lg w-full"
+                    className="rounded-lg shadow-lg w-full hover:scale-[1.01] transition-transform duration-500 ease-in-out"
                   />
                 </div>
               </div>
@@ -216,13 +216,13 @@ const Index = () => {
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Ready to Find Your Perfect Match?</h2>
             <p className="text-white/80 max-w-2xl mx-auto mb-10">
-              Join NewAppName today and take the first step towards your next great opportunity.
+              Join InternLink today and take the first step towards your next great opportunity.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button asChild size="lg" variant="secondary">
+              <Button asChild size="lg" variant="secondary" className="shadow-md hover:shadow-lg transition-shadow">
                 <Link to="/login?register=true&type=student">Sign Up as a Student</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10">
+              <Button asChild size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10 shadow-md hover:shadow-lg transition-shadow">
                 <Link to="/login?register=true&type=company">Sign Up as a Company</Link>
               </Button>
             </div>
@@ -230,16 +230,16 @@ const Index = () => {
         </section>
       </main>
       
-      <footer className="bg-gray-50 py-8">
+      <footer className="bg-gray-50 py-8 border-t">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <p className="text-muted-foreground">© 2025 NewAppName. All rights reserved.</p>
+              <p className="text-muted-foreground">© 2025 InternLink. All rights reserved.</p>
             </div>
             <div className="flex gap-6">
-              <Link to="/" className="text-muted-foreground hover:text-primary">Home</Link>
-              <Link to="/about" className="text-muted-foreground hover:text-primary">About</Link>
-              <Link to="/login" className="text-muted-foreground hover:text-primary">Login</Link>
+              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link>
+              <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
+              <Link to="/login" className="text-muted-foreground hover:text-primary transition-colors">Login</Link>
             </div>
           </div>
         </div>
