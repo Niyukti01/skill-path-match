@@ -36,9 +36,9 @@ const Index = () => {
         <Dialog open={showDownloadDialog} onOpenChange={setShowDownloadDialog}>
           <DialogContent className="max-w-md">
             <DialogHeader>
-              <DialogTitle>Download InternLink App</DialogTitle>
+              <DialogTitle>Download NewAppName App</DialogTitle>
               <DialogDescription>
-                Follow the steps below to download InternLink on your device.
+                Follow the steps below to download NewAppName on your device.
               </DialogDescription>
             </DialogHeader>
             
@@ -48,7 +48,7 @@ const Index = () => {
                 <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
                   <li>Look for the install icon in the address bar (screen with down arrow)</li>
                   <li>Click on the install icon</li>
-                  <li>Follow the prompts to install InternLink</li>
+                  <li>Follow the prompts to install NewAppName</li>
                 </ol>
               </div>
               
@@ -216,7 +216,7 @@ const Index = () => {
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Ready to Find Your Perfect Match?</h2>
             <p className="text-white/80 max-w-2xl mx-auto mb-10">
-              Join InternLink today and take the first step towards your next great opportunity.
+              Join NewAppName today and take the first step towards your next great opportunity.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Button asChild size="lg" variant="secondary">
@@ -234,7 +234,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <p className="text-muted-foreground">© 2025 InternLink. All rights reserved.</p>
+              <p className="text-muted-foreground">© 2025 NewAppName. All rights reserved.</p>
             </div>
             <div className="flex gap-6">
               <Link to="/" className="text-muted-foreground hover:text-primary">Home</Link>
