@@ -1,16 +1,79 @@
+
 import { HeroSection } from "@/components/HeroSection";
 import { Navbar } from "@/components/Navbar";
 import { FeatureCard } from "@/components/FeatureCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Search, User, Building2, Briefcase, LineChart } from "lucide-react";
+import { Search, User, Building2, Briefcase, LineChart, Download } from "lucide-react";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 const Index = () => {
+  const [showDownloadDialog, setShowDownloadDialog] = useState(false);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow">
         <HeroSection />
+        
+        {/* Download Button - New addition */}
+        <section className="py-6 bg-accent/10">
+          <div className="container mx-auto px-4 flex justify-center">
+            <Button 
+              onClick={() => setShowDownloadDialog(true)} 
+              variant="default" 
+              size="lg"
+              className="font-medium flex gap-2 items-center"
+            >
+              <Download size={18} />
+              Download App
+            </Button>
+          </div>
+        </section>
+
+        {/* Download Instructions Dialog */}
+        <Dialog open={showDownloadDialog} onOpenChange={setShowDownloadDialog}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Download InternLink App</DialogTitle>
+              <DialogDescription>
+                Follow the steps below to download InternLink on your device.
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-6 mt-4">
+              <div className="space-y-2">
+                <h3 className="font-semibold text-lg">On Desktop (Chrome, Edge)</h3>
+                <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
+                  <li>Look for the install icon in the address bar (screen with down arrow)</li>
+                  <li>Click on the install icon</li>
+                  <li>Follow the prompts to install InternLink</li>
+                </ol>
+              </div>
+              
+              <div className="space-y-2">
+                <h3 className="font-semibold text-lg">On Android</h3>
+                <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
+                  <li>Open Chrome browser</li>
+                  <li>Tap the three-dot menu in the upper right</li>
+                  <li>Select "Install app" or "Add to Home screen"</li>
+                  <li>Follow the on-screen instructions</li>
+                </ol>
+              </div>
+              
+              <div className="space-y-2">
+                <h3 className="font-semibold text-lg">On iOS</h3>
+                <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
+                  <li>Open Safari browser</li>
+                  <li>Tap the share button (square with up arrow) at the bottom</li>
+                  <li>Scroll down and tap "Add to Home Screen"</li>
+                  <li>Tap "Add" in the top right corner</li>
+                </ol>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
         
         {/* Features Section */}
         <section className="py-20">
