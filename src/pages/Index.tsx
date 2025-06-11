@@ -2,6 +2,11 @@
 import { HeroSection } from "@/components/HeroSection";
 import { Navbar } from "@/components/Navbar";
 import { FeatureCard } from "@/components/FeatureCard";
+import { TrustBadges } from "@/components/TrustBadges";
+import { Stats } from "@/components/Stats";
+import { Testimonials } from "@/components/Testimonials";
+import { FAQ } from "@/components/FAQ";
+import { Newsletter } from "@/components/Newsletter";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Search, User, Building2, Briefcase, LineChart, Download } from "lucide-react";
@@ -16,8 +21,9 @@ const Index = () => {
       <Navbar />
       <main className="flex-grow">
         <HeroSection />
+        <TrustBadges />
         
-        {/* Download Button - New addition */}
+        {/* Download Button */}
         <section className="py-6 bg-accent/10">
           <div className="container mx-auto px-4 flex justify-center">
             <Button 
@@ -104,6 +110,8 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        <Stats />
         
         {/* For Students Section */}
         <section className="py-20 bg-secondary/30">
@@ -210,6 +218,10 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        <Testimonials />
+        <FAQ />
+        <Newsletter />
         
         {/* CTA Section */}
         <section className="py-20 bg-primary">
@@ -230,16 +242,38 @@ const Index = () => {
         </section>
       </main>
       
-      <footer className="bg-gray-50 py-8 border-t">
+      <footer className="bg-gray-50 py-12 border-t">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-4 md:mb-0">
-              <p className="text-muted-foreground">© 2025 InternLink. All rights reserved.</p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="col-span-1 md:col-span-2">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="bg-primary rounded-md p-1 shadow-sm">
+                  <span className="text-white font-bold">IL</span>
+                </div>
+                <span className="font-bold text-xl">InternLink</span>
+              </div>
+              <p className="text-muted-foreground mb-4 max-w-md">
+                Connecting students with perfect internship opportunities. Build your career, find your passion.
+              </p>
+              <p className="text-muted-foreground text-sm">© 2025 InternLink. All rights reserved.</p>
             </div>
-            <div className="flex gap-6">
-              <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link>
-              <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link>
-              <Link to="/login" className="text-muted-foreground hover:text-primary transition-colors">Login</Link>
+            
+            <div>
+              <h3 className="font-semibold mb-4">For Students</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li><Link to="/login?register=true&type=student" className="hover:text-primary transition-colors">Create Profile</Link></li>
+                <li><Link to="/login" className="hover:text-primary transition-colors">Browse Internships</Link></li>
+                <li><Link to="/about" className="hover:text-primary transition-colors">How It Works</Link></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold mb-4">For Companies</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                <li><Link to="/login?register=true&type=company" className="hover:text-primary transition-colors">Post Internships</Link></li>
+                <li><Link to="/login" className="hover:text-primary transition-colors">Find Talent</Link></li>
+                <li><Link to="/about" className="hover:text-primary transition-colors">Success Stories</Link></li>
+              </ul>
             </div>
           </div>
         </div>
