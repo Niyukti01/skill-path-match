@@ -1,5 +1,5 @@
 
-import { Star } from "lucide-react";
+import { Star, Quote } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export function Testimonials() {
@@ -7,8 +7,8 @@ export function Testimonials() {
     {
       name: "Sarah Chen",
       role: "Computer Science Student",
-      company: "Stanford University",
-      content: "InternLink helped me land my dream internship at a top tech company. The matching algorithm is incredibly accurate!",
+      company: "Stanford University → Google",
+      content: "InternLink's matching algorithm is incredible! I found my dream internship at Google within two weeks. The platform made the entire process seamless and stress-free.",
       rating: 5,
       image: "https://images.unsplash.com/photo-1494790108755-2616b612b47c"
     },
@@ -16,55 +16,90 @@ export function Testimonials() {
       name: "Michael Rodriguez", 
       role: "HR Director",
       company: "TechCorp Inc.",
-      content: "We've found amazing talent through InternLink. The quality of candidates is consistently high.",
+      content: "We've hired 15+ interns through InternLink this year. The quality of candidates is exceptional, and the platform saves us countless hours in recruitment.",
       rating: 5,
       image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
     },
     {
       name: "Emily Johnson",
       role: "Marketing Student", 
-      company: "UCLA",
-      content: "The platform made my internship search so much easier. I received multiple offers within weeks!",
+      company: "UCLA → Meta",
+      content: "I received 5 internship offers within 3 weeks! InternLink's personalized approach and company matching made all the difference in my career journey.",
       rating: 5,
       image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80"
     }
   ];
 
   return (
-    <section className="py-20 bg-background">
+    <section className="py-24 bg-gradient-to-b from-background to-muted/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold mb-4">What Our Users Say</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Don't just take our word for it. Here's what students and companies are saying about InternLink.
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
+            <Quote className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium text-primary">Success Stories</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">What Our Community Says</h2>
+          <p className="text-muted-foreground text-xl max-w-3xl mx-auto leading-relaxed">
+            Real stories from students and companies who've found success through InternLink
           </p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
+            <Card key={index} className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 border-transparent hover:border-primary/20 bg-white">
+              <CardContent className="p-8">
+                <div className="flex items-center mb-6">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                    <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
-                <p className="text-muted-foreground mb-6 italic">"{testimonial.content}"</p>
+                
+                <Quote className="h-8 w-8 text-primary/20 mb-4" />
+                
+                <p className="text-muted-foreground mb-8 italic text-lg leading-relaxed">
+                  "{testimonial.content}"
+                </p>
+                
                 <div className="flex items-center">
-                  <img 
-                    src={testimonial.image} 
-                    alt={testimonial.name}
-                    className="h-12 w-12 rounded-full object-cover mr-4"
-                  />
+                  <div className="relative">
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.name}
+                      className="h-16 w-16 rounded-full object-cover mr-4 border-4 border-white shadow-lg"
+                    />
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                    </div>
+                  </div>
                   <div>
-                    <h4 className="font-semibold">{testimonial.name}</h4>
-                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                    <p className="text-xs text-muted-foreground">{testimonial.company}</p>
+                    <h4 className="font-bold text-lg">{testimonial.name}</h4>
+                    <p className="text-sm text-muted-foreground font-medium">{testimonial.role}</p>
+                    <p className="text-xs text-primary font-semibold">{testimonial.company}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Trust indicators */}
+        <div className="mt-16 text-center">
+          <div className="inline-flex items-center gap-8 px-8 py-4 rounded-2xl bg-muted/50 border">
+            <div className="flex items-center gap-2">
+              <div className="flex -space-x-2">
+                {[1,2,3,4,5].map(i => (
+                  <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent border-2 border-white"></div>
+                ))}
+              </div>
+              <span className="text-sm font-medium">500+ reviews</span>
+            </div>
+            <div className="w-px h-8 bg-border"></div>
+            <div className="flex items-center gap-2">
+              <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+              <span className="font-bold">4.9/5</span>
+              <span className="text-sm text-muted-foreground">average rating</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
