@@ -36,7 +36,7 @@ export function Stats() {
   return (
     <section className="py-24 bg-gradient-to-br from-primary via-primary/95 to-accent text-white relative overflow-hidden">
       {/* Background pattern */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.05%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-20">
@@ -72,7 +72,7 @@ export function Stats() {
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-2">
               <Clock className="h-5 w-5" />
-              <span className="text-3xl font-bold">< 2 min</span>
+              <span className="text-3xl font-bold">&lt; 2 min</span>
             </div>
             <p className="text-white/70">Average sign-up time</p>
           </div>
