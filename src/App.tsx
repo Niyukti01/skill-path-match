@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./pages/SplashScreen";
 import Presentation from "./pages/Presentation";
+import About from "./pages/About";
 
 // Initialize the React Query client
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => {
             <Route path="/profile/company" element={<CompanyProfile />} />
             <Route path="/dashboard/:userType" element={<Dashboard />} />
             <Route path="/presentation" element={<Presentation />} />
+            <Route path="/about" element={<About />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
