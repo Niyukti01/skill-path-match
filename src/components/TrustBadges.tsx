@@ -13,7 +13,7 @@ export function TrustBadges() {
       icon: Award,
       title: "#1 Rated Platform",
       description: "Top choice among students nationwide",
-      color: "from-amber-500/20 to-yellow-500/20"
+      color: "from-primary/20 to-primary/30"
     },
     {
       icon: Users,

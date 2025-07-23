@@ -64,7 +64,7 @@ const SplashScreen = () => {
           <span className="gradient-text">InternLink</span>
         </h1>
         
-        <p className="text-lg text-amber-700 mb-12 text-center max-w-md px-4">
+        <p className="text-lg text-primary/80 mb-12 text-center max-w-md px-4">
           Connect with the perfect internship opportunities tailored for you
         </p>
         
@@ -72,7 +72,7 @@ const SplashScreen = () => {
           <Button 
             onClick={handleProceed} 
             size="lg" 
-            className="w-full px-12 text-lg font-medium bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="w-full px-12 text-lg font-medium btn-gradient transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             Proceed
           </Button>
@@ -92,7 +92,7 @@ const SplashScreen = () => {
         }
         
         .gradient-text {
-          background: linear-gradient(to right, #f59e0b, #fbbf24);
+          background: linear-gradient(to right, hsl(262, 83%, 58%), hsl(262, 100%, 75%));
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
         }

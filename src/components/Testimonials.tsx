@@ -50,7 +50,7 @@ export function Testimonials() {
               <CardContent className="p-8">
                 <div className="flex items-center mb-6">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                    <Star key={i} className="h-5 w-5 fill-primary text-primary" />
                   ))}
                 </div>
                 
@@ -95,7 +95,7 @@ export function Testimonials() {
             </div>
             <div className="w-px h-8 bg-border"></div>
             <div className="flex items-center gap-2">
-              <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+              <Star className="h-5 w-5 fill-primary text-primary" />
               <span className="font-bold">4.9/5</span>
               <span className="text-sm text-muted-foreground">average rating</span>
             </div>

@@ -29,7 +29,7 @@ export function Stats() {
       value: "95%",
       label: "Success Rate",
       description: "Students finding internships within 30 days",
-      color: "from-yellow-500 to-yellow-600"
+      color: "from-primary to-primary/80"
     }
   ];
 
