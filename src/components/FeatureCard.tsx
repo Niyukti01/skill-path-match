@@ -1,6 +1,5 @@
 
 import { ReactNode } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface FeatureCardProps {
   title: string;
@@ -10,16 +9,15 @@ interface FeatureCardProps {
 
 export function FeatureCard({ title, description, icon }: FeatureCardProps) {
   return (
-    <Card className="border border-border bg-card hover:shadow-md transition-shadow">
-      <CardHeader className="pb-2">
-        <div className="bg-secondary/50 w-12 h-12 flex items-center justify-center rounded-full mb-4">
-          <div className="text-primary">{icon}</div>
-        </div>
-        <CardTitle>{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-muted-foreground">{description}</p>
-      </CardContent>
-    </Card>
+    <div className="group card-float p-8 rounded-2xl hover-lift">
+      <div className="bg-gradient-to-br from-primary/10 to-accent/10 w-16 h-16 rounded-xl flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-300 shadow-lg">
+        {icon}
+      </div>
+      <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors duration-300">{title}</h3>
+      <p className="text-muted-foreground leading-relaxed text-lg">{description}</p>
+      
+      {/* Decorative element */}
+      <div className="mt-6 w-12 h-1 bg-gradient-to-r from-primary to-accent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    </div>
   );
 }
