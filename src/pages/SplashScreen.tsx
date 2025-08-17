@@ -120,9 +120,9 @@ const SplashScreen = () => {
           height: 200%;
           background: linear-gradient(
             to bottom right,
-            rgba(255,255,255,0) 0%,
-            rgba(255,255,255,0.1) 50%,
-            rgba(255,255,255,0) 100%
+            hsl(var(--background) / 0) 0%,
+            hsl(var(--background) / 0.1) 50%,
+            hsl(var(--background) / 0) 100%
           );
           transform: rotate(30deg);
           animation: shine 3s infinite;

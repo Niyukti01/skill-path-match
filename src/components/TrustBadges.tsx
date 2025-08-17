@@ -7,7 +7,7 @@ export function TrustBadges() {
       icon: Shield,
       title: "Enterprise Security",
       description: "Bank-level encryption protects your data",
-      color: "from-emerald-500/20 to-teal-500/20"
+      color: "from-accent/10 to-accent/20"
     },
     {
       icon: Award,
@@ -19,13 +19,13 @@ export function TrustBadges() {
       icon: Users,
       title: "10,000+ Active Users",
       description: "Growing community of success stories",
-      color: "from-blue-500/20 to-cyan-500/20"
+      color: "from-secondary/30 to-primary/20"
     },
     {
       icon: CheckCircle,
       title: "100% Verified",
       description: "All opportunities thoroughly validated",
-      color: "from-purple-500/20 to-pink-500/20"
+      color: "from-accent/20 to-primary/10"
     }
   ];
 
@@ -71,7 +71,7 @@ export function TrustBadges() {
               <span className="font-semibold text-sm">24/7 Support</span>
             </div>
             <div className="flex items-center gap-2 glass-card px-4 py-2 rounded-full">
-              <Shield className="h-4 w-4 text-green-600" />
+              <Shield className="h-4 w-4 text-accent" />
               <span className="font-semibold text-sm">SOC 2 Compliant</span>
             </div>
           </div>

@@ -61,15 +61,15 @@ export function HeroSection() {
             {/* Trust indicators */}
             <div className="grid grid-cols-3 gap-6 text-center lg:text-left animate-fade-in" style={{ animationDelay: '0.6s' }}>
               <div className="flex flex-col lg:flex-row items-center gap-2">
-                <div className="w-3 h-3 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex-shrink-0"></div>
+                <div className="w-3 h-3 bg-gradient-to-r from-accent to-accent/80 rounded-full flex-shrink-0"></div>
                 <span className="text-sm font-medium">100% Free</span>
               </div>
               <div className="flex flex-col lg:flex-row items-center gap-2">
-                <div className="w-3 h-3 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex-shrink-0"></div>
+                <div className="w-3 h-3 bg-gradient-to-r from-primary to-primary/80 rounded-full flex-shrink-0"></div>
                 <span className="text-sm font-medium">Verified Companies</span>
               </div>
               <div className="flex flex-col lg:flex-row items-center gap-2">
-                <div className="w-3 h-3 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full flex-shrink-0"></div>
+                <div className="w-3 h-3 bg-gradient-to-r from-secondary to-muted rounded-full flex-shrink-0"></div>
                 <span className="text-sm font-medium">95% Success Rate</span>
               </div>
             </div>
@@ -91,13 +91,13 @@ export function HeroSection() {
                 {/* Enhanced floating success card */}
                 <div className="absolute top-8 left-8 glass-card rounded-xl p-4 animate-scale-in max-w-[200px] shadow-accent">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center flex-shrink-0">
-                      <CheckCircle className="text-green-600 w-6 h-6" />
+                    <div className="w-12 h-12 bg-gradient-to-br from-accent/20 to-accent/30 rounded-full flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="text-accent w-6 h-6" />
                     </div>
                     <div>
                       <p className="font-semibold text-sm">Perfect Match!</p>
                       <p className="text-xs text-muted-foreground">Software Engineering at Google</p>
-                      <p className="text-xs text-green-600 font-medium">98% compatibility</p>
+                      <p className="text-xs text-accent font-medium">98% compatibility</p>
                     </div>
                   </div>
                 </div>

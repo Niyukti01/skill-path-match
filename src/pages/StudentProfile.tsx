@@ -48,14 +48,14 @@ const StudentProfile = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-yellow-50 to-white">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-secondary to-background">
       <Navbar />
       <main className="flex-grow py-10">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <div className="bg-white p-8 rounded-xl shadow-lg border border-amber-100">
-              <h1 className="text-3xl font-bold mb-2 text-amber-800">Complete Your Profile</h1>
-              <p className="text-amber-600 mb-8">
+            <div className="glass-card p-8 rounded-xl shadow-elegant border border-border">
+              <h1 className="text-3xl font-bold mb-2 text-foreground">Complete Your Profile</h1>
+              <p className="text-muted-foreground mb-8">
                 Help us match you with the perfect internship opportunities.
               </p>
               
@@ -66,7 +66,7 @@ const StudentProfile = () => {
                   <Button 
                     variant="outline" 
                     onClick={() => navigate("/dashboard/student")}
-                    className="border-amber-400 text-amber-700 hover:bg-amber-50"
+                    className="border-border text-muted-foreground hover:bg-muted"
                   >
                     Skip for Now
                   </Button>
@@ -74,14 +74,14 @@ const StudentProfile = () => {
                     <Button 
                       variant="outline"
                       onClick={toggleApplications}
-                      className="border-amber-400 text-amber-700 hover:bg-amber-50"
+                      className="border-border text-muted-foreground hover:bg-muted"
                     >
                       {showApplications ? "Hide Applications" : "View Applications"}
                     </Button>
                     <Button 
                       type="submit" 
                       form="profile-form"
-                      className="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600"
+                      className="btn-gradient"
                     >
                       Save and Continue
                     </Button>
@@ -89,8 +89,8 @@ const StudentProfile = () => {
                 </div>
                 
                 {showApplications && (
-                  <div className="mt-6 p-4 bg-amber-50 rounded-lg border border-amber-200">
-                    <h2 className="text-xl font-semibold text-amber-800 mb-4">Your Applications</h2>
+                  <div className="mt-6 p-4 bg-secondary/50 rounded-lg border border-border">
+                    <h2 className="text-xl font-semibold text-foreground mb-4">Your Applications</h2>
                     
                     {applications.length > 0 ? (
                       <Table>
@@ -110,10 +110,10 @@ const StudentProfile = () => {
                               <TableCell>
                                 <span className={`px-2 py-1 rounded-full text-xs ${
                                   app.status === "In Review" 
-                                    ? "bg-amber-100 text-amber-800" 
+                                    ? "bg-muted text-muted-foreground" 
                                     : app.status === "Interview Scheduled" 
-                                      ? "bg-green-100 text-green-800"
-                                      : "bg-gray-100 text-gray-800"
+                                      ? "bg-accent/20 text-accent"
+                                      : "bg-secondary text-secondary-foreground"
                                 }`}>
                                   {app.status}
                                 </span>
@@ -124,7 +124,7 @@ const StudentProfile = () => {
                         </TableBody>
                       </Table>
                     ) : (
-                      <p className="text-center text-amber-600 py-4">You haven't submitted any applications yet.</p>
+                      <p className="text-center text-muted-foreground py-4">You haven't submitted any applications yet.</p>
                     )}
                   </div>
                 )}
