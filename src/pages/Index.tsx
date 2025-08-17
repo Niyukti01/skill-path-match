@@ -242,7 +242,7 @@ const Index = () => {
         </section>
       </main>
       
-      <footer className="bg-gray-50 py-12 border-t">
+      <footer className="bg-secondary/20 py-12 border-t border-border">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">

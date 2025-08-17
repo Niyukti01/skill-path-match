@@ -65,7 +65,7 @@ export function Challenges() {
             <CardHeader>
               <div className="flex items-start justify-between">
                 <CardTitle className="text-lg flex items-center gap-3">
-                  <AlertCircle className="h-5 w-5 text-amber-500" />
+                  <AlertCircle className="h-5 w-5 text-primary" />
                   {challenge.title}
                 </CardTitle>
                 <div className="flex gap-2">
