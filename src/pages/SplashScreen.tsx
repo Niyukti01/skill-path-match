@@ -13,13 +13,22 @@ const SplashScreen = () => {
   useEffect(() => {
     // Create decorative floating elements
     const newParticles = [];
+    const colors = [
+      'hsl(262, 83%, 58%)', // primary
+      'hsl(262, 100%, 75%)', // primary-glow
+      'hsl(38, 92%, 50%)', // accent
+      'hsl(38, 100%, 70%)', // accent-glow
+    ];
+    
     for (let i = 0; i < 15; i++) {
+      const baseColor = colors[Math.floor(Math.random() * colors.length)];
+      const opacity = Math.random() * 0.4 + 0.1;
       newParticles.push({
         id: i,
         x: Math.random() * 100,
         y: Math.random() * 100,
         size: Math.random() * 10 + 5,
-        color: `rgba(255, 222, ${Math.floor(Math.random() * 100 + 100)}, ${Math.random() * 0.5 + 0.2})`
+        color: baseColor.replace(')', `, ${opacity})`)
       });
     }
     setParticles(newParticles);
