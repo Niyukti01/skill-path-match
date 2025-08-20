@@ -313,6 +313,14 @@
     box-shadow: var(--shadow-accent);
   }
 
+  .shadow-premium {
+    box-shadow: var(--shadow-premium);
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
   .shadow-3xl {
     box-shadow: 0 35px 60px -12px hsl(var(--foreground) / 0.25);
   }
