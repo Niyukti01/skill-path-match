@@ -1,6 +1,6 @@
 
 // Service Worker for InternLink PWA
-const CACHE_NAME = 'internlink-cache-v1';
+const CACHE_NAME = 'internlink-cache-v2';
 const urlsToCache = [
   '/',
   '/index.html',
