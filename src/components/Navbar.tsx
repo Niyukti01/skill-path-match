@@ -8,13 +8,13 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="border-b bg-white/95 backdrop-blur-sm w-full py-4 shadow-sm sticky top-0 z-50">
+    <nav className="border-b border-border/50 glass w-full py-5 sticky top-0 z-50 shadow-soft">
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <Link to="/home" className="font-bold text-xl flex items-center gap-2 hover:opacity-90 transition-opacity">
-          <div className="bg-primary rounded-md p-1.5 shadow-sm">
-            <span className="text-white font-bold">IL</span>
+        <Link to="/home" className="font-bold text-xl flex items-center gap-3 hover:scale-105 transition-all duration-300 group">
+          <div className="bg-gradient-to-br from-primary to-accent rounded-xl p-2 shadow-elegant group-hover:shadow-glow">
+            <span className="text-white font-bold text-sm">IL</span>
           </div>
-          <span className="hidden sm:inline bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+          <span className="hidden sm:inline gradient-text font-bold text-2xl">
             InternLink
           </span>
         </Link>
@@ -42,10 +42,10 @@ export function Navbar() {
             </Link>
           </div>
           <div className="flex items-center gap-3">
-            <Button asChild variant="ghost" className="font-medium">
+            <Button asChild variant="ghost" className="font-medium hover:scale-105">
               <Link to="/login">Log in</Link>
             </Button>
-            <Button asChild className="font-medium shadow-sm hover:shadow-md transition-shadow">
+            <Button asChild variant="premium" className="font-medium">
               <Link to="/login?register=true">Get Started</Link>
             </Button>
           </div>
@@ -53,7 +53,7 @@ export function Navbar() {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="absolute top-full left-0 right-0 bg-white shadow-lg border-t z-50 md:hidden animate-fade-in">
+          <div className="absolute top-full left-0 right-0 glass-premium shadow-premium border-t border-border/30 z-50 md:hidden animate-fade-in">
             <div className="container mx-auto px-4 py-6 space-y-4">
               <Link 
                 to="/home" 
