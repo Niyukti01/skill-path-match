@@ -44,14 +44,14 @@ export function HeroSection() {
             {/* CTA buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mb-12 justify-center lg:justify-start animate-scale-in" style={{ animationDelay: '0.4s' }}>
               <Button asChild size="lg" variant="premium" className="text-lg px-10 py-7 h-auto animate-glow group">
-                <Link to="/login?register=true&type=student" className="flex items-center gap-3">
+                <Link to="/auth" className="flex items-center gap-3">
                   <Users className="h-6 w-6" />
                   I'm a Student
                   <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="text-lg px-10 py-7 h-auto glass-premium hover-lift border-2 border-primary/20">
-                <Link to="/login?register=true&type=company" className="flex items-center gap-3">
+                <Link to="/auth" className="flex items-center gap-3">
                   <Building2 className="h-6 w-6" />
                   I'm a Company
                 </Link>

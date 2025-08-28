@@ -2,10 +2,19 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User, LogOut, Shield } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, profile, signOut, isAdmin } = useAuth();
 
   return (
     <nav className="border-b border-border/50 glass w-full py-5 sticky top-0 z-50 shadow-soft">
@@ -42,12 +51,58 @@ export function Navbar() {
             </Link>
           </div>
           <div className="flex items-center gap-3">
-            <Button asChild variant="ghost" className="font-medium hover:scale-105">
-              <Link to="/login">Log in</Link>
-            </Button>
-            <Button asChild variant="premium" className="font-medium">
-              <Link to="/login?register=true">Get Started</Link>
-            </Button>
+            {user ? (
+              <div className="flex items-center gap-3">
+                {isAdmin && (
+                  <Button asChild variant="outline" size="sm">
+                    <Link to="/admin">
+                      <Shield className="h-4 w-4 mr-2" />
+                      Admin
+                    </Link>
+                  </Button>
+                )}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="flex items-center gap-2">
+                      <User className="h-4 w-4" />
+                      <span>{profile?.name || 'User'}</span>
+                      {profile?.user_type && (
+                        <Badge variant="secondary" className="text-xs">
+                          {profile.user_type}
+                        </Badge>
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <Link 
+                        to={`/dashboard/${profile?.user_type || 'student'}`}
+                        className="flex items-center gap-2"
+                      >
+                        <User className="h-4 w-4" />
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={signOut}
+                      className="flex items-center gap-2 text-destructive"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            ) : (
+              <>
+                <Button asChild variant="ghost" className="font-medium hover:scale-105">
+                  <Link to="/auth">Log in</Link>
+                </Button>
+                <Button asChild variant="premium" className="font-medium">
+                  <Link to="/auth">Get Started</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
 
@@ -77,21 +132,63 @@ export function Navbar() {
                 Success Stories
               </Link>
               <div className="pt-4 space-y-3">
-                <Button 
-                  asChild 
-                  variant="ghost" 
-                  className="w-full font-medium"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Link to="/login">Log in</Link>
-                </Button>
-                <Button 
-                  asChild 
-                  className="w-full font-medium shadow-sm"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Link to="/login?register=true">Get Started</Link>
-                </Button>
+                {user ? (
+                  <>
+                    {isAdmin && (
+                      <Button 
+                        asChild 
+                        variant="outline" 
+                        className="w-full font-medium"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <Link to="/admin">
+                          <Shield className="h-4 w-4 mr-2" />
+                          Admin Dashboard
+                        </Link>
+                      </Button>
+                    )}
+                    <Button 
+                      asChild 
+                      variant="ghost" 
+                      className="w-full font-medium"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <Link to={`/dashboard/${profile?.user_type || 'student'}`}>
+                        <User className="h-4 w-4 mr-2" />
+                        Dashboard
+                      </Link>
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      className="w-full font-medium text-destructive"
+                      onClick={() => {
+                        signOut();
+                        setIsOpen(false);
+                      }}
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button 
+                      asChild 
+                      variant="ghost" 
+                      className="w-full font-medium"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <Link to="/auth">Log in</Link>
+                    </Button>
+                    <Button 
+                      asChild 
+                      className="w-full font-medium shadow-sm"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <Link to="/auth">Get Started</Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
