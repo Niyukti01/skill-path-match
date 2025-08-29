@@ -41,12 +41,43 @@ export type Database = {
         }
         Relationships: []
       }
+      login_sessions: {
+        Row: {
+          device_info: Json | null
+          id: string
+          ip_address: string | null
+          login_at: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          device_info?: Json | null
+          id?: string
+          ip_address?: string | null
+          login_at?: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          device_info?: Json | null
+          id?: string
+          ip_address?: string | null
+          login_at?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
           goals: string
           id: string
           industry: string
+          last_login_at: string | null
+          last_login_ip: string | null
+          last_user_agent: string | null
+          login_count: number | null
           requirements: string
           role: string
           skills: string
@@ -56,6 +87,10 @@ export type Database = {
           goals: string
           id?: string
           industry: string
+          last_login_at?: string | null
+          last_login_ip?: string | null
+          last_user_agent?: string | null
+          login_count?: number | null
           requirements: string
           role: string
           skills: string
@@ -65,6 +100,10 @@ export type Database = {
           goals?: string
           id?: string
           industry?: string
+          last_login_at?: string | null
+          last_login_ip?: string | null
+          last_user_agent?: string | null
+          login_count?: number | null
           requirements?: string
           role?: string
           skills?: string
@@ -79,6 +118,15 @@ export type Database = {
       is_admin: {
         Args: { user_uuid?: string }
         Returns: boolean
+      }
+      update_login_details: {
+        Args: {
+          device_data?: Json
+          ip_addr?: string
+          user_agent_str?: string
+          user_uuid: string
+        }
+        Returns: undefined
       }
     }
     Enums: {
