@@ -14,63 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
-      profiles: {
+      communication_log: {
         Row: {
-          bio: string | null
-          company_name: string | null
+          content: string
           created_at: string
-          date_of_birth: string | null
-          email: string
           id: string
-          internship_types: string[] | null
-          location: string | null
-          name: string
-          phone: string | null
-          qualification: string | null
-          skills: string[] | null
-          updated_at: string
+          status: string
+          type: string
           user_id: string
-          user_role: Database["public"]["Enums"]["user_role"]
-          user_type: Database["public"]["Enums"]["user_type"]
-          website: string | null
         }
         Insert: {
-          bio?: string | null
-          company_name?: string | null
-          created_at?: string
-          date_of_birth?: string | null
-          email: string
+          content: string
+          created_at: string
           id?: string
-          internship_types?: string[] | null
-          location?: string | null
-          name: string
-          phone?: string | null
-          qualification?: string | null
-          skills?: string[] | null
-          updated_at?: string
-          user_id: string
-          user_role?: Database["public"]["Enums"]["user_role"]
-          user_type: Database["public"]["Enums"]["user_type"]
-          website?: string | null
+          status: string
+          type: string
+          user_id?: string
         }
         Update: {
-          bio?: string | null
-          company_name?: string | null
+          content?: string
           created_at?: string
-          date_of_birth?: string | null
-          email?: string
           id?: string
-          internship_types?: string[] | null
-          location?: string | null
-          name?: string
-          phone?: string | null
-          qualification?: string | null
-          skills?: string[] | null
-          updated_at?: string
+          status?: string
+          type?: string
           user_id?: string
-          user_role?: Database["public"]["Enums"]["user_role"]
-          user_type?: Database["public"]["Enums"]["user_type"]
-          website?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          goals: string
+          id: string
+          industry: string
+          requirements: string
+          role: string
+          skills: string
+        }
+        Insert: {
+          created_at: string
+          goals: string
+          id?: string
+          industry: string
+          requirements: string
+          role: string
+          skills: string
+        }
+        Update: {
+          created_at?: string
+          goals?: string
+          id?: string
+          industry?: string
+          requirements?: string
+          role?: string
+          skills?: string
         }
         Relationships: []
       }
