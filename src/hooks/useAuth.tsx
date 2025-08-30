@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               const { data: profileData } = await supabase
                 .from('profiles')
                 .select('*')
-                .eq('user_id', session.user.id)
+                .eq('id', session.user.id)
                 .single();
               setProfile(profileData);
             } catch (error) {
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             const { data: profileData } = await supabase
               .from('profiles')
               .select('*')
-              .eq('user_id', session.user.id)
+              .eq('id', session.user.id)
               .single();
             setProfile(profileData);
           } catch (error) {
@@ -135,6 +135,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           description: error.message,
           variant: "destructive"
         });
+      } else {
+        // Track login details
+        setTimeout(async () => {
+          try {
+            const { data } = await supabase.auth.getUser();
+            if (data.user) {
+              await supabase.rpc('update_login_details', {
+                user_uuid: data.user.id,
+                ip_addr: null, // IP will be captured server-side if needed
+                user_agent_str: navigator.userAgent,
+                device_data: {
+                  platform: navigator.platform,
+                  language: navigator.language,
+                  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+                }
+              });
+            }
+          } catch (trackingError) {
+            console.error('Error tracking login:', trackingError);
+          }
+        }, 0);
       }
 
       return { error };
