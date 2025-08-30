@@ -23,7 +23,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const isAdmin = profile?.user_role === 'admin';
+  console.log('AuthProvider state:', { user: !!user, session: !!session, profile: !!profile, loading });
+
+  const isAdmin = profile?.role === 'admin';
 
   useEffect(() => {
     // Set up auth state listener
