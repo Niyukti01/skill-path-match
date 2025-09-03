@@ -22,7 +22,7 @@ interface UserProfile {
   id: string;
   email: string;
   user_type: 'student' | 'company';
-  user_role: 'user' | 'admin';
+  role: 'user' | 'admin';
   name: string;
   created_at: string;
   last_login_at?: string;
@@ -124,7 +124,7 @@ const AdminDashboard = () => {
           id: authUser.id,
           email: authUser.email || 'No email',
           user_type: (authUser.user_metadata?.user_type || 'student') as 'student' | 'company',
-          user_role: (profile?.role || 'user') as 'user' | 'admin',
+          role: (profile?.role || 'user') as 'user' | 'admin',
           name: authUser.user_metadata?.name || profile?.skills || 'Unknown User',
           created_at: authUser.created_at,
           last_login_at: profile?.last_login_at,
@@ -172,7 +172,7 @@ const AdminDashboard = () => {
         id: profile.id,
         email: 'Email not available',
         user_type: 'student' as const,
-        user_role: (profile.role || 'user') as 'user' | 'admin',
+        role: (profile.role || 'user') as 'user' | 'admin',
         name: profile.skills || 'Unknown User',
         created_at: profile.created_at,
         last_login_at: profile.last_login_at,
@@ -369,7 +369,7 @@ const AdminDashboard = () => {
                             </TableCell>
                             <TableCell className="font-medium">
                               {profile.name}
-                              {profile.user_role === 'admin' && (
+                              {profile.role === 'admin' && (
                                 <Badge variant="destructive" className="ml-2 text-xs">Admin</Badge>
                               )}
                             </TableCell>
