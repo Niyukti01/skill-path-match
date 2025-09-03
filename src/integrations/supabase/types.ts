@@ -110,6 +110,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_logins: {
+        Row: {
+          email: string | null
+          id: string
+          login_time: string | null
+          user_id: string | null
+        }
+        Insert: {
+          email?: string | null
+          id?: string
+          login_time?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          email?: string | null
+          id?: string
+          login_time?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
