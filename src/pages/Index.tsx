@@ -16,8 +16,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 const Index = () => {
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
 
-  console.log('Index component is rendering!');
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
