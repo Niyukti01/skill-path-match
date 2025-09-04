@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import VerifyAccount from "./pages/VerifyAccount";
 import StudentProfile from "./pages/StudentProfile";
 import CompanyProfile from "./pages/CompanyProfile";
 import Dashboard from "./pages/Dashboard";
@@ -69,6 +70,7 @@ const AppContent = () => {
       <Route path="/" element={showSplash ? <SplashScreen /> : <Index />} />
       <Route path="/home" element={<Index />} />
       <Route path="/auth" element={<Auth />} />
+      <Route path="/verify-account" element={<VerifyAccount />} />
       <Route path="/profile/student" element={<StudentProfile />} />
       <Route path="/profile/company" element={<CompanyProfile />} />
       <Route path="/dashboard/:userType" element={<Dashboard />} />

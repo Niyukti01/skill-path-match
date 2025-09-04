@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 const Auth = () => {
   const { signUp, signIn } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   const [activeTab, setActiveTab] = useState("login");
   const [userType, setUserType] = useState<"student" | "company">("student");
@@ -34,16 +36,22 @@ const Auth = () => {
     
     if (type === "register") {
       if (formData.password !== formData.confirmPassword) {
+        toast({
+          title: "Password mismatch",
+          description: "Please make sure both passwords match.",
+          variant: "destructive"
+        });
         return;
       }
       
-      const { error } = await signUp(formData.email, formData.password, {
+      const result = await signUp(formData.email, formData.password, {
         name: formData.name,
         userType
       });
       
-      if (!error) {
-        // Will show success toast from useAuth
+      if (!result.error && result.needsVerification) {
+        // Redirect to verification page
+        navigate(`/verify-account?email=${encodeURIComponent(formData.email)}&name=${encodeURIComponent(formData.name)}`);
       }
     } else {
       const { error } = await signIn(formData.email, formData.password);
