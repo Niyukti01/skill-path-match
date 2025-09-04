@@ -2,15 +2,23 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/sonner";
 
 const SplashScreen = () => {
   const navigate = useNavigate();
+  const { user, loading } = useAuth();
   const [showDialog, setShowDialog] = useState(false);
   const [particles, setParticles] = useState<Array<{id: number, x: number, y: number, size: number, color: string}>>([]);
 
   useEffect(() => {
+    // If user is already logged in, redirect to home
+    if (!loading && user) {
+      navigate('/home');
+      return;
+    }
+    
     // Create decorative floating elements
     const newParticles = [];
     const colors = [
@@ -32,11 +40,23 @@ const SplashScreen = () => {
       });
     }
     setParticles(newParticles);
-  }, []);
+  }, [user, loading, navigate]);
 
   const handleProceed = () => {
     navigate('/home');
   };
+
+  // Show loading spinner while checking auth
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-secondary to-background">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold mb-2">Loading...</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-secondary to-background overflow-hidden relative">

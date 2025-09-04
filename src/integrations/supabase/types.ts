@@ -71,6 +71,7 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
+          email: string | null
           goals: string
           id: string
           industry: string
@@ -78,12 +79,17 @@ export type Database = {
           last_login_ip: string | null
           last_user_agent: string | null
           login_count: number | null
+          name: string | null
           requirements: string
           role: string
           skills: string
+          user_id: string | null
+          user_role: string | null
+          user_type: string | null
         }
         Insert: {
           created_at: string
+          email?: string | null
           goals: string
           id?: string
           industry: string
@@ -91,12 +97,17 @@ export type Database = {
           last_login_ip?: string | null
           last_user_agent?: string | null
           login_count?: number | null
+          name?: string | null
           requirements: string
           role: string
           skills: string
+          user_id?: string | null
+          user_role?: string | null
+          user_type?: string | null
         }
         Update: {
           created_at?: string
+          email?: string | null
           goals?: string
           id?: string
           industry?: string
@@ -104,9 +115,13 @@ export type Database = {
           last_login_ip?: string | null
           last_user_agent?: string | null
           login_count?: number | null
+          name?: string | null
           requirements?: string
           role?: string
           skills?: string
+          user_id?: string | null
+          user_role?: string | null
+          user_type?: string | null
         }
         Relationships: []
       }
