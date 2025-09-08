@@ -190,6 +190,15 @@ export type Database = {
         Args: { user_uuid?: string }
         Returns: boolean
       }
+      log_communication_event: {
+        Args: {
+          p_content: string
+          p_status?: string
+          p_type: string
+          p_user_id: string
+        }
+        Returns: undefined
+      }
       update_login_details: {
         Args: {
           device_data?: Json

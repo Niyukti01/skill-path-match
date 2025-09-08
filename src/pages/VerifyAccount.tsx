@@ -18,7 +18,7 @@ const VerifyAccount = () => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(10 * 60); // 10 minutes in seconds
   
   const email = searchParams.get("email");
   const name = searchParams.get("name");
@@ -121,6 +121,14 @@ const VerifyAccount = () => {
         console.error('Error confirming email:', confirmError);
       }
 
+      // Log successful verification
+      await supabase.rpc('log_communication_event', {
+        p_user_id: user.id,
+        p_type: 'email_verification',
+        p_content: `Email verified successfully for ${email}`,
+        p_status: 'success'
+      });
+
       toast({
         title: "Account verified successfully!",
         description: "Welcome to InternLink. Your account is now active.",
@@ -166,13 +174,13 @@ const VerifyAccount = () => {
         throw new Error('Failed to generate verification code');
       }
 
-      // Store new code in database
+      // Store new code in database (10-minute expiry)
       const { error: insertError } = await supabase
         .from('verification_codes')
         .insert({
           user_id: user.id,
           code: newCodeData,
-          expires_at: new Date(Date.now() + 15 * 60 * 1000).toISOString(), // 15 minutes from now
+          expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 minutes from now
         });
 
       if (insertError) {
@@ -185,8 +193,22 @@ const VerifyAccount = () => {
       });
 
       if (emailError) {
-        throw emailError;
+        console.error('Email sending error:', emailError);
+        toast({
+          title: "Failed to send email",
+          description: "Could not send verification code. Please try again or contact support.",
+          variant: "destructive"
+        });
+        return;
       }
+
+      // Log resend event
+      await supabase.rpc('log_communication_event', {
+        p_user_id: user.id,
+        p_type: 'email_verification',
+        p_content: `Verification code resent to ${email}`,
+        p_status: 'success'
+      });
 
       toast({
         title: "Verification code sent!",
@@ -194,7 +216,7 @@ const VerifyAccount = () => {
       });
 
       // Reset timer
-      setTimeLeft(15 * 60);
+      setTimeLeft(10 * 60);
       
     } catch (error: any) {
       console.error('Error resending code:', error);
@@ -275,7 +297,7 @@ const VerifyAccount = () => {
                       type="button"
                       variant="ghost"
                       onClick={handleResendCode}
-                      disabled={resendLoading || timeLeft > 13 * 60} // Allow resend after 2 minutes
+                      disabled={resendLoading || timeLeft > 8 * 60} // Allow resend after 2 minutes
                       className="text-primary hover:text-primary/80"
                     >
                       {resendLoading ? (

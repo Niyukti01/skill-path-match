@@ -59,7 +59,7 @@ const handler = async (req: Request): Promise<Response> => {
                 <div class="code">${code}</div>
               </div>
               
-              <p>Enter this code on the verification page to activate your account. This code will expire in 15 minutes for security reasons.</p>
+              <p>Enter this code on the verification page to activate your account. This code will expire in 10 minutes for security reasons.</p>
               <p>If you didn't create an account with InternLink, please ignore this email.</p>
             </div>
             <div class="footer">

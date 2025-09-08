@@ -116,13 +116,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             throw new Error('Failed to generate verification code');
           }
 
-          // Store verification code
+          // Store verification code (now with 10-minute expiry)
           const { error: insertError } = await supabase
             .from('verification_codes')
             .insert({
               user_id: data.user.id,
               code: codeData,
-              expires_at: new Date(Date.now() + 15 * 60 * 1000).toISOString(), // 15 minutes from now
+              expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 minutes from now
             });
 
           if (insertError) {
@@ -140,20 +140,48 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
           if (emailError) {
             console.error('Error sending verification email:', emailError);
-            // Don't fail the signup if email fails, but log it
+            toast({
+              title: "Account created",
+              description: "Your account was created but we couldn't send the verification email. Please try again or contact support.",
+              variant: "destructive"
+            });
+            // Log the email failure
+            await supabase.rpc('log_communication_event', {
+              p_user_id: data.user.id,
+              p_type: 'email_verification',
+              p_content: `Failed to send verification email to ${email}`,
+              p_status: 'failed'
+            });
+            return { error: emailError };
           }
+
+          // Log successful signup and email send
+          await supabase.rpc('log_communication_event', {
+            p_user_id: data.user.id,
+            p_type: 'signup',
+            p_content: `User signed up: ${userData.name} (${email})`,
+            p_status: 'success'
+          });
+
+          await supabase.rpc('log_communication_event', {
+            p_user_id: data.user.id,
+            p_type: 'email_verification',
+            p_content: `Verification email sent to ${email}`,
+            p_status: 'success'
+          });
 
           toast({
             title: "Account created!",
-            description: "Please check your email for a verification code to complete your registration."
+            description: "Verification code sent to your email. Please check your inbox and enter the code to activate your account."
           });
 
           return { error: null, user: data.user, needsVerification: true };
         } catch (verificationError: any) {
           console.error('Error setting up verification:', verificationError);
           toast({
-            title: "Account created",
-            description: "Your account was created but there was an issue with verification. Please contact support."
+            title: "Account creation failed",
+            description: "There was an issue creating your account. Please try again or contact support.",
+            variant: "destructive"
           });
           return { error: verificationError };
         }
@@ -179,9 +207,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (error) {
         // Provide more helpful error messages
-        let errorMessage = error.message;
+        let errorMessage = "Incorrect email or password. Please try again.";
+        
         if (error.message.includes('Invalid login credentials')) {
-          errorMessage = "Please check your email and password, or sign up if you don't have an account yet.";
+          errorMessage = "Incorrect email or password. Please try again.";
+        } else if (error.message.includes('Email not confirmed')) {
+          errorMessage = "Please verify your email address before signing in.";
+        } else if (error.message.includes('Too many requests')) {
+          errorMessage = "Too many login attempts. Please wait a moment and try again.";
         }
         
         toast({
@@ -189,12 +222,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           description: errorMessage,
           variant: "destructive"
         });
+
+        // Log failed login attempt
+        try {
+          const { data: userData } = await supabase.from('profiles').select('id').eq('email', email).single();
+          if (userData) {
+            await supabase.rpc('log_communication_event', {
+              p_user_id: userData.id,
+              p_type: 'login_attempt',
+              p_content: `Failed login attempt for ${email}`,
+              p_status: 'failed'
+            });
+          }
+        } catch (logError) {
+          console.error('Error logging failed login:', logError);
+        }
       } else {
-        // Track login details
+        // Success - track login details and log event
         setTimeout(async () => {
           try {
             const { data } = await supabase.auth.getUser();
             if (data.user) {
+              // Update login tracking
               await supabase.rpc('update_login_details', {
                 user_uuid: data.user.id,
                 ip_addr: null, // IP will be captured server-side if needed
@@ -204,6 +253,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                   language: navigator.language,
                   timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
                 }
+              });
+
+              // Log successful login
+              await supabase.rpc('log_communication_event', {
+                p_user_id: data.user.id,
+                p_type: 'login',
+                p_content: `Successful login for ${email}`,
+                p_status: 'success'
+              });
+
+              toast({
+                title: "Login successful",
+                description: "Redirecting to your dashboard...",
               });
             }
           } catch (trackingError) {
@@ -216,7 +278,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error: any) {
       toast({
         title: "Sign in failed",
-        description: error.message,
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive"
       });
       return { error };
