@@ -27,9 +27,9 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(`Sending verification email to ${email} with code ${code}`);
 
     const emailResponse = await resend.emails.send({
-      from: "InternLink <onboarding@resend.dev>",
+      from: "InternLink <noreply@resend.dev>",
       to: [email],
-      subject: "Verify your InternLink account",
+      subject: "Your InternLink Verification Code",
       html: `
         <!DOCTYPE html>
         <html>
@@ -52,18 +52,36 @@ const handler = async (req: Request): Promise<Response> => {
             </div>
             <div class="content">
               <h2>Hello ${name}!</h2>
-              <p>Thank you for signing up for InternLink. To complete your registration, please verify your email address using the code below:</p>
+              <p>Thank you for signing up for InternLink. To complete your registration, please verify your email address using the 6-digit code below:</p>
               
               <div class="verification-code">
-                <p><strong>Your verification code is:</strong></p>
+                <p><strong>Your 6-digit verification code:</strong></p>
                 <div class="code">${code}</div>
               </div>
               
-              <p>Enter this code on the verification page to activate your account. This code will expire in 10 minutes for security reasons.</p>
-              <p>If you didn't create an account with InternLink, please ignore this email.</p>
+              <p><strong>Important:</strong></p>
+              <ul style="margin: 16px 0; padding-left: 20px;">
+                <li>Enter this code on the verification page to activate your account</li>
+                <li>This code expires in 10 minutes for security</li>
+                <li>Keep this code confidential - don't share it with anyone</li>
+              </ul>
+              
+              <p>If you didn't create an account with InternLink, please ignore this email or contact support.</p>
+              
+              <div style="margin-top: 30px; padding: 20px; background: #f0f0f0; border-radius: 8px; border-left: 4px solid #667eea;">
+                <p style="margin: 0; font-size: 14px; color: #555;">
+                  <strong>Trouble receiving emails?</strong><br>
+                  • Check your spam/junk folder<br>
+                  • Add noreply@resend.dev to your contacts<br>
+                  • Make sure ${email} is correct
+                </p>
+              </div>
             </div>
             <div class="footer">
               <p>© 2024 InternLink - Connecting talent with opportunity</p>
+              <p style="font-size: 12px; color: #999; margin-top: 10px;">
+                This email was sent to ${email}. If you believe this was sent in error, please ignore this message.
+              </p>
             </div>
           </div>
         </body>
