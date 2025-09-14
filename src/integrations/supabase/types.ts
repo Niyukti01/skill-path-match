@@ -71,7 +71,7 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
-          email: string | null
+          email: string
           goals: string
           id: string
           industry: string
@@ -79,17 +79,17 @@ export type Database = {
           last_login_ip: string | null
           last_user_agent: string | null
           login_count: number | null
-          name: string | null
+          name: string
           requirements: string
           role: string
           skills: string
           user_id: string | null
           user_role: string | null
-          user_type: string | null
+          user_type: string
         }
         Insert: {
           created_at: string
-          email?: string | null
+          email: string
           goals: string
           id?: string
           industry: string
@@ -97,17 +97,17 @@ export type Database = {
           last_login_ip?: string | null
           last_user_agent?: string | null
           login_count?: number | null
-          name?: string | null
+          name: string
           requirements: string
           role: string
           skills: string
           user_id?: string | null
           user_role?: string | null
-          user_type?: string | null
+          user_type: string
         }
         Update: {
           created_at?: string
-          email?: string | null
+          email?: string
           goals?: string
           id?: string
           industry?: string
@@ -115,34 +115,46 @@ export type Database = {
           last_login_ip?: string | null
           last_user_agent?: string | null
           login_count?: number | null
-          name?: string | null
+          name?: string
           requirements?: string
           role?: string
           skills?: string
           user_id?: string | null
           user_role?: string | null
-          user_type?: string | null
+          user_type?: string
         }
         Relationships: []
       }
       user_logins: {
         Row: {
-          email: string | null
+          email: string
           id: string
-          login_time: string | null
-          user_id: string | null
+          ip_address: string | null
+          login_time: string
+          role: string
+          user_agent: string | null
+          user_id: string
+          user_type: string
         }
         Insert: {
-          email?: string | null
+          email: string
           id?: string
-          login_time?: string | null
-          user_id?: string | null
+          ip_address?: string | null
+          login_time?: string
+          role: string
+          user_agent?: string | null
+          user_id: string
+          user_type: string
         }
         Update: {
-          email?: string | null
+          email?: string
           id?: string
-          login_time?: string | null
-          user_id?: string | null
+          ip_address?: string | null
+          login_time?: string
+          role?: string
+          user_agent?: string | null
+          user_id?: string
+          user_type?: string
         }
         Relationships: []
       }
@@ -185,6 +197,26 @@ export type Database = {
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      get_recent_logins: {
+        Args: { days_back?: number }
+        Returns: {
+          company_logins: number
+          login_date: string
+          student_logins: number
+          total_logins: number
+        }[]
+      }
+      get_user_statistics: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          companies_today: number
+          logins_today: number
+          students_today: number
+          total_companies: number
+          total_students: number
+          total_users: number
+        }[]
       }
       is_admin: {
         Args: { user_uuid?: string }

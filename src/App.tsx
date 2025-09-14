@@ -7,11 +7,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
-import VerifyAccount from "./pages/VerifyAccount";
 import StudentProfile from "./pages/StudentProfile";
 import CompanyProfile from "./pages/CompanyProfile";
 import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import NewDashboard from "./pages/NewDashboard";
+import NewAdminDashboard from "./pages/NewAdminDashboard";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./pages/SplashScreen";
 import Presentation from "./pages/Presentation";
@@ -70,11 +71,11 @@ const AppContent = () => {
       <Route path="/" element={showSplash ? <SplashScreen /> : <Index />} />
       <Route path="/home" element={<Index />} />
       <Route path="/auth" element={<Auth />} />
-      <Route path="/verify-account" element={<VerifyAccount />} />
+      <Route path="/dashboard" element={<NewDashboard />} />
       <Route path="/profile/student" element={<StudentProfile />} />
       <Route path="/profile/company" element={<CompanyProfile />} />
       <Route path="/dashboard/:userType" element={<Dashboard />} />
-      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/admin" element={<NewAdminDashboard />} />
       <Route path="/presentation" element={<Presentation />} />
       <Route path="/about" element={<About />} />
       <Route path="/splash" element={<SplashScreen />} />

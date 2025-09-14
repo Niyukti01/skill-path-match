@@ -8,7 +8,7 @@ interface AuthContextType {
   session: Session | null;
   profile: any | null;
   loading: boolean;
-  signUp: (email: string, password: string, userData: any) => Promise<{ error: any; user?: User; needsVerification?: boolean }>;
+  signUp: (email: string, password: string, userData: any) => Promise<{ error: any; user?: User }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   isAdmin: boolean;
@@ -84,13 +84,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signUp = async (email: string, password: string, userData: any) => {
     try {
-      const redirectUrl = `${window.location.origin}/`;
-      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: redirectUrl,
           data: {
             name: userData.name,
             user_type: userData.userType
@@ -108,83 +105,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       if (data.user) {
-        try {
-          // Generate verification code
-          const { data: codeData, error: codeError } = await supabase.rpc('generate_verification_code');
-          
-          if (codeError || !codeData) {
-            throw new Error('Failed to generate verification code');
-          }
+        // Log successful signup
+        await supabase.rpc('log_communication_event', {
+          p_user_id: data.user.id,
+          p_type: 'signup',
+          p_content: `User signed up: ${userData.name} (${email})`,
+          p_status: 'success'
+        });
 
-          // Store verification code (now with 10-minute expiry)
-          const { error: insertError } = await supabase
-            .from('verification_codes')
-            .insert({
-              user_id: data.user.id,
-              code: codeData,
-              expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 minutes from now
-            });
+        toast({
+          title: "Account created successfully!",
+          description: "You can now sign in with your credentials."
+        });
 
-          if (insertError) {
-            throw insertError;
-          }
-
-          // Send verification email
-          const { error: emailError } = await supabase.functions.invoke('send-verification-email', {
-            body: { 
-              email: data.user.email, 
-              name: userData.name, 
-              code: codeData 
-            }
-          });
-
-          if (emailError) {
-            console.error('Error sending verification email:', emailError);
-            toast({
-              title: "Account created",
-              description: "Your account was created but we couldn't send the verification email. Please try again or contact support.",
-              variant: "destructive"
-            });
-            // Log the email failure
-            await supabase.rpc('log_communication_event', {
-              p_user_id: data.user.id,
-              p_type: 'email_verification',
-              p_content: `Failed to send verification email to ${email}`,
-              p_status: 'failed'
-            });
-            return { error: emailError };
-          }
-
-          // Log successful signup and email send
-          await supabase.rpc('log_communication_event', {
-            p_user_id: data.user.id,
-            p_type: 'signup',
-            p_content: `User signed up: ${userData.name} (${email})`,
-            p_status: 'success'
-          });
-
-          await supabase.rpc('log_communication_event', {
-            p_user_id: data.user.id,
-            p_type: 'email_verification',
-            p_content: `Verification email sent to ${email}`,
-            p_status: 'success'
-          });
-
-          toast({
-            title: "Account created!",
-            description: "Verification code sent to your email. Please check your inbox and enter the code to activate your account."
-          });
-
-          return { error: null, user: data.user, needsVerification: true };
-        } catch (verificationError: any) {
-          console.error('Error setting up verification:', verificationError);
-          toast({
-            title: "Account creation failed",
-            description: "There was an issue creating your account. Please try again or contact support.",
-            variant: "destructive"
-          });
-          return { error: verificationError };
-        }
+        return { error: null, user: data.user };
       }
 
       return { error };

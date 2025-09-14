@@ -76,7 +76,7 @@ export function Navbar() {
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
                       <Link 
-                        to={`/dashboard/${profile?.user_type || 'student'}`}
+                        to="/dashboard"
                         className="flex items-center gap-2"
                       >
                         <User className="h-4 w-4" />
@@ -153,7 +153,7 @@ export function Navbar() {
                       className="w-full font-medium"
                       onClick={() => setIsOpen(false)}
                     >
-                      <Link to={`/dashboard/${profile?.user_type || 'student'}`}>
+                      <Link to="/dashboard">
                         <User className="h-4 w-4 mr-2" />
                         Dashboard
                       </Link>

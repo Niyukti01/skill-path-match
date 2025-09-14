@@ -1,4 +1,7 @@
 
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { HeroSection } from "@/components/HeroSection";
 import { Navbar } from "@/components/Navbar";
 import { FeatureCard } from "@/components/FeatureCard";
@@ -15,6 +18,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 
 const Index = () => {
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -163,7 +174,7 @@ const Index = () => {
                   </div>
                 </div>
                 <Button asChild size="lg" variant="premium" className="group">
-                  <Link to="/login?register=true&type=student" className="flex items-center gap-2">
+                  <Link to="/auth?register=true&type=student" className="flex items-center gap-2">
                     Get Started as a Student
                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -210,7 +221,7 @@ const Index = () => {
                   </div>
                 </div>
                 <Button asChild size="lg" variant="outline" className="glass-premium border-2 border-accent/30 hover:border-accent/50 group">
-                  <Link to="/login?register=true&type=company" className="flex items-center gap-2">
+                  <Link to="/auth?register=true&type=company" className="flex items-center gap-2">
                     Get Started as a Company
                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -250,14 +261,14 @@ const Index = () => {
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-6">
               <Button asChild size="lg" variant="secondary" className="text-lg px-10 py-6 h-auto shadow-premium hover:shadow-glow group">
-                <Link to="/login?register=true&type=student" className="flex items-center gap-3">
+                <Link to="/auth?register=true&type=student" className="flex items-center gap-3">
                   <Users className="h-5 w-5" />
                   Sign Up as a Student
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="text-lg px-10 py-6 h-auto bg-white/10 text-white border-white/30 hover:bg-white/20 hover:border-white/50 shadow-premium hover:shadow-glow backdrop-blur-sm group">
-                <Link to="/login?register=true&type=company" className="flex items-center gap-3">
+                <Link to="/auth?register=true&type=company" className="flex items-center gap-3">
                   <Building2 className="h-5 w-5" />
                   Sign Up as a Company
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -287,8 +298,8 @@ const Index = () => {
             <div>
               <h3 className="font-semibold mb-4">For Students</h3>
               <ul className="space-y-2 text-muted-foreground">
-                <li><Link to="/login?register=true&type=student" className="hover:text-primary transition-colors">Create Profile</Link></li>
-                <li><Link to="/login" className="hover:text-primary transition-colors">Browse Internships</Link></li>
+                <li><Link to="/auth?register=true&type=student" className="hover:text-primary transition-colors">Create Profile</Link></li>
+                <li><Link to="/auth" className="hover:text-primary transition-colors">Browse Internships</Link></li>
                 <li><Link to="/about" className="hover:text-primary transition-colors">How It Works</Link></li>
               </ul>
             </div>
@@ -296,8 +307,8 @@ const Index = () => {
             <div>
               <h3 className="font-semibold mb-4">For Companies</h3>
               <ul className="space-y-2 text-muted-foreground">
-                <li><Link to="/login?register=true&type=company" className="hover:text-primary transition-colors">Post Internships</Link></li>
-                <li><Link to="/login" className="hover:text-primary transition-colors">Find Talent</Link></li>
+                <li><Link to="/auth?register=true&type=company" className="hover:text-primary transition-colors">Post Internships</Link></li>
+                <li><Link to="/auth" className="hover:text-primary transition-colors">Find Talent</Link></li>
                 <li><Link to="/about" className="hover:text-primary transition-colors">Success Stories</Link></li>
               </ul>
             </div>

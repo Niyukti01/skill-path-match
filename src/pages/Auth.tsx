@@ -49,9 +49,10 @@ const Auth = () => {
         userType
       });
       
-      if (!result.error && result.needsVerification) {
-        // Redirect to verification page
-        navigate(`/verify-account?email=${encodeURIComponent(formData.email)}&name=${encodeURIComponent(formData.name)}`);
+      if (!result.error) {
+        // Switch to login tab after successful registration
+        setActiveTab("login");
+        setFormData(prev => ({ ...prev, password: "", confirmPassword: "" }));
       }
     } else {
       const { error } = await signIn(formData.email, formData.password);
