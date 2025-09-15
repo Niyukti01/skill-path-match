@@ -90,17 +90,17 @@ export type Database = {
         Insert: {
           created_at: string
           email: string
-          goals: string
+          goals?: string
           id?: string
-          industry: string
+          industry?: string
           last_login_at?: string | null
           last_login_ip?: string | null
           last_user_agent?: string | null
           login_count?: number | null
           name: string
-          requirements: string
+          requirements?: string
           role: string
-          skills: string
+          skills?: string
           user_id?: string | null
           user_role?: string | null
           user_type: string

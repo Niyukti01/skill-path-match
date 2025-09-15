@@ -84,6 +84,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signUp = async (email: string, password: string, userData: any) => {
     try {
+      // Check if user already exists
+      const { data: existingUser } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('email', email)
+        .single();
+      
+      if (existingUser) {
+        const errorMessage = "An account with this email already exists. Please try signing in instead.";
+        toast({
+          title: "Registration failed",
+          description: errorMessage,
+          variant: "destructive"
+        });
+        return { error: { message: errorMessage } };
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -96,26 +113,52 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       if (error) {
+        let errorMessage = "Failed to create account. Please try again.";
+        
+        if (error.message.includes('User already registered')) {
+          errorMessage = "An account with this email already exists. Please try signing in instead.";
+        } else if (error.message.includes('Password')) {
+          errorMessage = "Password must be at least 6 characters long.";
+        } else if (error.message.includes('Email')) {
+          errorMessage = "Please enter a valid email address.";
+        } else if (error.message.includes('database')) {
+          errorMessage = "Database connection error. Please try again in a moment.";
+        }
+        
         toast({
-          title: "Sign up failed",
-          description: error.message,
+          title: "Registration failed",
+          description: errorMessage,
           variant: "destructive"
         });
         return { error };
       }
 
       if (data.user) {
-        // Log successful signup
-        await supabase.rpc('log_communication_event', {
-          p_user_id: data.user.id,
-          p_type: 'signup',
-          p_content: `User signed up: ${userData.name} (${email})`,
-          p_status: 'success'
-        });
+        // Verify the profile was created
+        setTimeout(async () => {
+          try {
+            const { data: profile } = await supabase
+              .from('profiles')
+              .select('*')
+              .eq('id', data.user.id)
+              .single();
+            
+            if (!profile) {
+              console.error('Profile was not created for user:', data.user.id);
+              toast({
+                title: "Warning",
+                description: "Account created but profile setup incomplete. Please contact support if you experience issues.",
+                variant: "destructive"
+              });
+            }
+          } catch (profileError) {
+            console.error('Error checking profile creation:', profileError);
+          }
+        }, 1000);
 
         toast({
           title: "Account created successfully!",
-          description: "You can now sign in with your credentials."
+          description: `Welcome ${userData.name}! You can now sign in with your credentials.`
         });
 
         return { error: null, user: data.user };
@@ -123,9 +166,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       return { error };
     } catch (error: any) {
+      let errorMessage = "An unexpected error occurred. Please try again.";
+      
+      if (error.message?.includes('fetch')) {
+        errorMessage = "Network connection error. Please check your internet connection and try again.";
+      }
+      
       toast({
-        title: "Sign up failed",
-        description: error.message,
+        title: "Registration failed",
+        description: errorMessage,
         variant: "destructive"
       });
       return { error };
@@ -140,15 +189,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       if (error) {
-        // Provide more helpful error messages
-        let errorMessage = "Incorrect email or password. Please try again.";
+        let errorMessage = "Invalid email or password. Please check your credentials and try again.";
         
         if (error.message.includes('Invalid login credentials')) {
-          errorMessage = "Incorrect email or password. Please try again.";
+          errorMessage = "Invalid email or password. Please check your credentials and try again.";
         } else if (error.message.includes('Email not confirmed')) {
           errorMessage = "Please verify your email address before signing in.";
         } else if (error.message.includes('Too many requests')) {
           errorMessage = "Too many login attempts. Please wait a moment and try again.";
+        } else if (error.message.includes('database')) {
+          errorMessage = "Database connection error. Please try again in a moment.";
         }
         
         toast({
@@ -157,62 +207,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           variant: "destructive"
         });
 
-        // Log failed login attempt
-        try {
-          const { data: userData } = await supabase.from('profiles').select('id').eq('email', email).single();
-          if (userData) {
-            await supabase.rpc('log_communication_event', {
-              p_user_id: userData.id,
-              p_type: 'login_attempt',
-              p_content: `Failed login attempt for ${email}`,
-              p_status: 'failed'
-            });
-          }
-        } catch (logError) {
-          console.error('Error logging failed login:', logError);
-        }
+        return { error };
       } else {
-        // Success - track login details and log event
-        setTimeout(async () => {
-          try {
-            const { data } = await supabase.auth.getUser();
-            if (data.user) {
-              // Update login tracking
-              await supabase.rpc('update_login_details', {
-                user_uuid: data.user.id,
-                ip_addr: null, // IP will be captured server-side if needed
-                user_agent_str: navigator.userAgent,
-                device_data: {
-                  platform: navigator.platform,
-                  language: navigator.language,
-                  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-                }
-              });
-
-              // Log successful login
-              await supabase.rpc('log_communication_event', {
-                p_user_id: data.user.id,
-                p_type: 'login',
-                p_content: `Successful login for ${email}`,
-                p_status: 'success'
-              });
-
-              toast({
-                title: "Login successful",
-                description: "Redirecting to your dashboard...",
-              });
-            }
-          } catch (trackingError) {
-            console.error('Error tracking login:', trackingError);
-          }
-        }, 0);
+        // Success - the rest will be handled by onAuthStateChange
+        toast({
+          title: "Login successful",
+          description: "Welcome back! Redirecting to your dashboard...",
+        });
       }
 
       return { error };
     } catch (error: any) {
+      let errorMessage = "An unexpected error occurred. Please try again.";
+      
+      if (error.message?.includes('fetch')) {
+        errorMessage = "Network connection error. Please check your internet connection and try again.";
+      }
+      
       toast({
         title: "Sign in failed",
-        description: "An unexpected error occurred. Please try again.",
+        description: errorMessage,
         variant: "destructive"
       });
       return { error };
