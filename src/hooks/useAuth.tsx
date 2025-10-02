@@ -31,10 +31,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        console.log('Auth state change:', event);
-        
         if (!mounted) return;
-        
+
+        console.log('Auth event:', event);
         setSession(session);
         setUser(session?.user ?? null);
         
@@ -99,11 +98,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         setLoading(false);
       }
-    }).catch((error) => {
-      console.error('Session check error:', error);
-      if (mounted) {
-        setLoading(false);
-      }
+    }).catch(error => {
+      console.error('Error getting session:', error);
+      setLoading(false);
     });
 
     return () => {
@@ -119,7 +116,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         .from('profiles')
         .select('email')
         .eq('email', email)
-        .single();
+        .maybeSingle();
       
       if (existingUser) {
         const errorMessage = "An account with this email already exists. Please try signing in instead.";
@@ -171,7 +168,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               .from('profiles')
               .select('*')
               .eq('id', data.user.id)
-              .single();
+              .maybeSingle();
             
             if (!profile) {
               console.error('Profile was not created for user:', data.user.id);

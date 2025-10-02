@@ -49,6 +49,11 @@ export function Navbar() {
             <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors font-medium">
               Success Stories
             </Link>
+            {user && (profile?.user_type === 'company' || isAdmin) && (
+              <Link to="/students" className="text-muted-foreground hover:text-primary transition-colors font-medium">
+                Students
+              </Link>
+            )}
           </div>
           <div className="flex items-center gap-3">
             {user ? (
@@ -131,6 +136,15 @@ export function Navbar() {
               >
                 Success Stories
               </Link>
+              {user && (profile?.user_type === 'company' || isAdmin) && (
+                <Link 
+                  to="/students" 
+                  className="block py-2 text-muted-foreground hover:text-primary transition-colors font-medium"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Students
+                </Link>
+              )}
               <div className="pt-4 space-y-3">
                 {user ? (
                   <>
