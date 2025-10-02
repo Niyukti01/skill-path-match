@@ -28,12 +28,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     let mounted = true;
 
-    // Set up auth state listener
+    // Set up auth state listener first
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (!mounted) return;
-
-        console.log('Auth event:', event);
+        
+        console.log('Auth state change:', event);
         setSession(session);
         setUser(session?.user ?? null);
         
@@ -55,9 +55,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               }
             } catch (error) {
               console.error('Error fetching profile:', error);
-            } finally {
-              setLoading(false);
             }
+            setLoading(false);
           }, 0);
         } else {
           setProfile(null);
@@ -66,10 +65,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     );
 
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    // Then check for existing session
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
       if (!mounted) return;
       
+      if (error) {
+        console.error('Error getting session:', error);
+        setLoading(false);
+        return;
+      }
+
       setSession(session);
       setUser(session?.user ?? null);
       
@@ -78,29 +83,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setTimeout(async () => {
           if (!mounted) return;
           try {
-            const { data: profileData, error } = await supabase
+            const { data: profileData, error: profileError } = await supabase
               .from('profiles')
               .select('*')
               .eq('id', session.user.id)
               .maybeSingle();
             
-            if (error) {
-              console.error('Error fetching profile:', error);
+            if (profileError) {
+              console.error('Error fetching profile:', profileError);
             } else {
               setProfile(profileData);
             }
           } catch (error) {
             console.error('Error fetching profile:', error);
-          } finally {
-            setLoading(false);
           }
+          setLoading(false);
         }, 0);
       } else {
         setLoading(false);
       }
-    }).catch(error => {
-      console.error('Error getting session:', error);
-      setLoading(false);
     });
 
     return () => {
@@ -135,7 +136,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           data: {
             name: userData.name,
             user_type: userData.userType
-          }
+          },
+          emailRedirectTo: `${window.location.origin}/`
         }
       });
 
