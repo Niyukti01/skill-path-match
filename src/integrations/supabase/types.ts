@@ -222,6 +222,10 @@ export type Database = {
         Args: { user_uuid?: string }
         Returns: boolean
       }
+      is_company: {
+        Args: { user_uuid?: string }
+        Returns: boolean
+      }
       log_communication_event: {
         Args: {
           p_content: string

@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Navbar } from "@/components/Navbar";
 import { UserStats } from "@/components/UserStats";
 import { LoginActivity } from "@/components/LoginActivity";
+import { StudentsList } from "@/components/StudentsList";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -107,27 +108,33 @@ const NewDashboard = () => {
           </Card>
 
           {/* Role-specific Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle>
-                {profile.user_type === 'student' ? 'For Students' : 'For Companies'}
-              </CardTitle>
-              <CardDescription>
-                {profile.user_type === 'student' 
-                  ? 'View platform statistics and explore internship opportunities'
-                  : 'View platform statistics and connect with talented students'
-                }
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                {profile.user_type === 'student' 
-                  ? 'You can view the total number of students and companies on the platform. Use this information to understand the community size and opportunities available.'
-                  : 'You can view the total number of students and companies on the platform. This helps you understand the talent pool and competition in your industry.'
-                }
-              </p>
-            </CardContent>
-          </Card>
+          {profile.user_type === 'company' ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>Available Students</CardTitle>
+                <CardDescription>
+                  Browse and connect with talented students looking for internship opportunities
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <StudentsList />
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle>For Students</CardTitle>
+                <CardDescription>
+                  View platform statistics and explore internship opportunities
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  You can view the total number of students and companies on the platform. Use this information to understand the community size and opportunities available.
+                </p>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </main>
     </div>
