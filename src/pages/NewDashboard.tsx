@@ -59,9 +59,9 @@ const NewDashboard = () => {
             </div>
             
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => navigate(`/profile/${profile.user_type}`)}>
+              <Button variant="outline" size="sm" onClick={() => navigate("/profile/edit")}>
                 <User className="w-4 h-4 mr-2" />
-                My Profile
+                Edit Profile
               </Button>
               {isAdmin && (
                 <Button variant="outline" size="sm" onClick={() => navigate("/admin")}>

@@ -5,11 +5,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
 import { UserStats } from "@/components/UserStats";
 import { LoginActivity } from "@/components/LoginActivity";
+import { AdminUserTable } from "@/components/AdminUserTable";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Download, Users, Trash2, Eye } from "lucide-react";
+import { Download, Eye } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface UserData {
@@ -181,69 +182,8 @@ const NewAdminDashboard = () => {
           {/* Activity Charts */}
           <LoginActivity />
 
-          {/* Users Management */}
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0">
-              <div>
-                <CardTitle>All Users</CardTitle>
-                <CardDescription>
-                  Manage registered users ({users.length} total)
-                </CardDescription>
-              </div>
-              <Button onClick={exportUserData} variant="outline" size="sm">
-                <Download className="w-4 h-4 mr-2" />
-                Export CSV
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Role</TableHead>
-                      <TableHead>Created</TableHead>
-                      <TableHead>Last Login</TableHead>
-                      <TableHead>Logins</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {users.slice(0, 10).map((user) => (
-                      <TableRow key={user.id}>
-                        <TableCell className="font-medium">{user.name}</TableCell>
-                        <TableCell>{user.email}</TableCell>
-                        <TableCell>
-                          <Badge variant={user.user_type === 'student' ? 'default' : 'secondary'}>
-                            {user.user_type}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={user.role === 'admin' ? 'destructive' : 'outline'}>
-                            {user.role}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>{new Date(user.created_at).toLocaleDateString()}</TableCell>
-                        <TableCell>
-                          {user.last_login_at 
-                            ? new Date(user.last_login_at).toLocaleDateString()
-                            : 'Never'
-                          }
-                        </TableCell>
-                        <TableCell>{user.login_count || 0}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-              {users.length > 10 && (
-                <p className="text-sm text-muted-foreground mt-4">
-                  Showing 10 of {users.length} users. Export CSV to see all users.
-                </p>
-              )}
-            </CardContent>
-          </Card>
+          {/* Users Management with Search */}
+          <AdminUserTable users={users} />
 
           {/* Recent Login Activity */}
           <Card>

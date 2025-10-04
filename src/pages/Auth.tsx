@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 const Auth = () => {
   const { signUp, signIn } = useAuth();
@@ -17,6 +18,7 @@ const Auth = () => {
   
   const [activeTab, setActiveTab] = useState("login");
   const [userType, setUserType] = useState<"student" | "company">("student");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -33,8 +35,39 @@ const Auth = () => {
 
   const handleSubmit = async (e: React.FormEvent, type: "login" | "register") => {
     e.preventDefault();
+    setIsSubmitting(true);
     
     if (type === "register") {
+      // Validate name
+      if (!formData.name.trim()) {
+        toast({
+          title: "Validation Error",
+          description: "Name is required",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Validate email
+      if (!formData.email.trim()) {
+        toast({
+          title: "Validation Error",
+          description: "Email is required",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Validate password
+      if (formData.password.length < 6) {
+        toast({
+          title: "Validation Error",
+          description: "Password must be at least 6 characters long",
+          variant: "destructive"
+        });
+        return;
+      }
+
       if (formData.password !== formData.confirmPassword) {
         toast({
           title: "Password mismatch",
@@ -44,23 +77,48 @@ const Auth = () => {
         return;
       }
       
-      const result = await signUp(formData.email, formData.password, {
-        name: formData.name,
+      const result = await signUp(formData.email.trim(), formData.password, {
+        name: formData.name.trim(),
         userType
       });
       
       if (!result.error) {
+        toast({
+          title: "Success!",
+          description: "Account created successfully. You can now sign in.",
+        });
         // Switch to login tab after successful registration
         setActiveTab("login");
         setFormData(prev => ({ ...prev, password: "", confirmPassword: "" }));
       }
     } else {
-      const { error } = await signIn(formData.email, formData.password);
+      // Validate login fields
+      if (!formData.email.trim()) {
+        toast({
+          title: "Validation Error",
+          description: "Email is required",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (!formData.password) {
+        toast({
+          title: "Validation Error",
+          description: "Password is required",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const { error } = await signIn(formData.email.trim(), formData.password);
       
       if (!error) {
-        navigate("/");
+        navigate("/dashboard");
       }
     }
+    
+    setIsSubmitting(false);
   };
 
   return (
@@ -109,8 +167,15 @@ const Auth = () => {
                           required
                         />
                       </div>
-                      <Button type="submit" className="w-full">
-                        Sign In
+                      <Button type="submit" className="w-full" disabled={isSubmitting}>
+                        {isSubmitting ? (
+                          <>
+                            <LoadingSpinner size="sm" className="mr-2" />
+                            Signing in...
+                          </>
+                        ) : (
+                          "Sign In"
+                        )}
                       </Button>
                     </form>
                   </TabsContent>
@@ -198,8 +263,15 @@ const Auth = () => {
                             required
                           />
                         </div>
-                        <Button type="submit" className="w-full">
-                          Create Account
+                        <Button type="submit" className="w-full" disabled={isSubmitting}>
+                          {isSubmitting ? (
+                            <>
+                              <LoadingSpinner size="sm" className="mr-2" />
+                              Creating account...
+                            </>
+                          ) : (
+                            "Create Account"
+                          )}
                         </Button>
                       </form>
                     </div>

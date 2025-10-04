@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Menu, X, User, LogOut, Shield } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Badge } from "@/components/ui/badge";
+import { LogoutConfirmDialog } from "./LogoutConfirmDialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +15,14 @@ import {
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const { user, profile, signOut, isAdmin } = useAuth();
+
+  const handleSignOut = async () => {
+    setShowLogoutDialog(false);
+    setIsOpen(false);
+    await signOut();
+  };
 
   return (
     <nav className="border-b border-border/50 glass w-full py-5 sticky top-0 z-50 shadow-soft">
@@ -89,7 +97,7 @@ export function Navbar() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem 
-                      onClick={signOut}
+                      onClick={() => setShowLogoutDialog(true)}
                       className="flex items-center gap-2 text-destructive"
                     >
                       <LogOut className="h-4 w-4" />
@@ -175,10 +183,7 @@ export function Navbar() {
                     <Button 
                       variant="outline"
                       className="w-full font-medium text-destructive"
-                      onClick={() => {
-                        signOut();
-                        setIsOpen(false);
-                      }}
+                      onClick={() => setShowLogoutDialog(true)}
                     >
                       <LogOut className="h-4 w-4 mr-2" />
                       Sign Out
@@ -208,6 +213,12 @@ export function Navbar() {
           </div>
         )}
       </div>
+      
+      <LogoutConfirmDialog 
+        open={showLogoutDialog}
+        onOpenChange={setShowLogoutDialog}
+        onConfirm={handleSignOut}
+      />
     </nav>
   );
 }

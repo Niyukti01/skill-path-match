@@ -23,7 +23,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const isAdmin = profile?.role === 'admin';
+  // Use secure role checking from user_roles table
+  const [isAdmin, setIsAdmin] = useState(false);
+  
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (!user) {
+        setIsAdmin(false);
+        return;
+      }
+      
+      try {
+        const { data, error } = await supabase.rpc('is_admin_v2', { user_uuid: user.id });
+        if (!error && data) {
+          setIsAdmin(data);
+        } else {
+          setIsAdmin(false);
+        }
+      } catch (err) {
+        console.error('Error checking admin status:', err);
+        setIsAdmin(false);
+      }
+    };
+    
+    checkAdminStatus();
+  }, [user]);
 
   useEffect(() => {
     let mounted = true;
