@@ -14,6 +14,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import NewDashboard from "./pages/NewDashboard";
 import NewAdminDashboard from "./pages/NewAdminDashboard";
 import Students from "./pages/Students";
+import StudentDetail from "./pages/StudentDetail";
 import NotFound from "./pages/NotFound";
 import SplashScreen from "./pages/SplashScreen";
 import Presentation from "./pages/Presentation";
@@ -74,6 +75,7 @@ const AppContent = () => {
       <Route path="/auth" element={<Auth />} />
       <Route path="/dashboard" element={<NewDashboard />} />
       <Route path="/students" element={<Students />} />
+      <Route path="/students/:id" element={<StudentDetail />} />
       <Route path="/profile/student" element={<StudentProfile />} />
       <Route path="/profile/company" element={<CompanyProfile />} />
       <Route path="/dashboard/:userType" element={<Dashboard />} />

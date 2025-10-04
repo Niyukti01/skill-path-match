@@ -122,65 +122,74 @@ const Students = () => {
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredStudents.map((student) => (
-                <Card key={student.id} className="hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <CardTitle className="text-xl">{student.name}</CardTitle>
-                        <Badge variant="secondary" className="mt-2">
-                          Student
-                        </Badge>
+              {filteredStudents.map((student) => {
+                const hasDetails = student.skills || student.goals || student.requirements || student.industry;
+                
+                return (
+                  <Card key={student.id} className="hover:shadow-lg transition-shadow">
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <CardTitle className="text-xl">{student.name}</CardTitle>
+                          <Badge variant="secondary" className="mt-2">
+                            Student
+                          </Badge>
+                        </div>
+                        <GraduationCap className="w-8 h-8 text-primary" />
                       </div>
-                      <GraduationCap className="w-8 h-8 text-primary" />
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      {student.email && (
-                        <div className="flex items-center gap-2 text-sm">
-                          <Mail className="w-4 h-4 text-muted-foreground" />
-                          <span className="truncate">{student.email}</span>
-                        </div>
-                      )}
-                      
-                      {student.skills && (
-                        <div>
-                          <p className="text-sm font-medium mb-1">Skills</p>
-                          <p className="text-sm text-muted-foreground">{student.skills}</p>
-                        </div>
-                      )}
-                      
-                      {student.goals && (
-                        <div>
-                          <p className="text-sm font-medium mb-1">Goals</p>
-                          <p className="text-sm text-muted-foreground line-clamp-3">{student.goals}</p>
-                        </div>
-                      )}
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="space-y-2">
+                        {student.email && (
+                          <div className="flex items-center gap-2 text-sm">
+                            <Mail className="w-4 h-4 text-muted-foreground" />
+                            <span className="truncate">{student.email}</span>
+                          </div>
+                        )}
+                        
+                        {!hasDetails ? (
+                          <div className="py-4 text-center">
+                            <p className="text-sm text-muted-foreground italic">
+                              No details filled yet
+                            </p>
+                          </div>
+                        ) : (
+                          <>
+                            {student.skills && (
+                              <div>
+                                <p className="text-sm font-medium mb-1">Skills</p>
+                                <p className="text-sm text-muted-foreground line-clamp-2">{student.skills}</p>
+                              </div>
+                            )}
+                            
+                            {student.goals && (
+                              <div>
+                                <p className="text-sm font-medium mb-1">Goals</p>
+                                <p className="text-sm text-muted-foreground line-clamp-2">{student.goals}</p>
+                              </div>
+                            )}
+                          </>
+                        )}
 
-                      {student.created_at && (
-                        <div className="pt-2 border-t">
-                          <p className="text-xs text-muted-foreground">
-                            Member since {new Date(student.created_at).toLocaleDateString()}
-                          </p>
-                        </div>
-                      )}
-                    </div>
+                        {student.created_at && (
+                          <div className="pt-2 border-t">
+                            <p className="text-xs text-muted-foreground">
+                              Member since {new Date(student.created_at).toLocaleDateString()}
+                            </p>
+                          </div>
+                        )}
+                      </div>
 
-                    <Button 
-                      className="w-full" 
-                      onClick={() => {
-                        toast({
-                          title: "Contact Student",
-                          description: `You can reach out to ${student.name} at ${student.email}`
-                        });
-                      }}
-                    >
-                      Contact Student
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+                      <Button 
+                        className="w-full" 
+                        onClick={() => navigate(`/students/${student.id}`)}
+                      >
+                        View Details
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           )}
         </div>
