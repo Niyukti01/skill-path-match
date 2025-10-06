@@ -21,41 +21,73 @@ import SplashScreen from "./pages/SplashScreen";
 import Presentation from "./pages/Presentation";
 import About from "./pages/About";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Initialize the React Query client
 const queryClient = new QueryClient();
 
-// Enhanced App component with email confirmation handling
+// Enhanced App component with email confirmation handling and proper session management
 const AppContent = () => {
+  const navigate = useNavigate();
   const [showSplash, setShowSplash] = useState(true);
   const [isEmailConfirmation, setIsEmailConfirmation] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    // Check if this is an email confirmation redirect
-    const fragment = window.location.hash;
-    const urlParams = new URLSearchParams(window.location.search);
-    
-    if (fragment.includes('access_token') || fragment.includes('refresh_token') || urlParams.has('token_hash')) {
-      setIsEmailConfirmation(true);
-      setShowSplash(false);
-      
-      // Handle the auth callback
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session) {
-          // User is confirmed and logged in, redirect to home
-          window.location.href = '/home';
-        }
-      });
-    } else {
-      // Check if user is already logged in
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session) {
+    let mounted = true;
+
+    const initializeSession = async () => {
+      try {
+        // Check if this is an email confirmation redirect
+        const fragment = window.location.hash;
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        if (fragment.includes('access_token') || fragment.includes('refresh_token') || urlParams.has('token_hash')) {
+          setIsEmailConfirmation(true);
           setShowSplash(false);
+          
+          // Handle the auth callback
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session && mounted) {
+            // Use navigate instead of window.location.href to prevent full page reload
+            setTimeout(() => navigate('/home', { replace: true }), 500);
+          }
+        } else {
+          // Check if user is already logged in
+          const { data: { session } } = await supabase.auth.getSession();
+          if (mounted) {
+            if (session) {
+              setShowSplash(false);
+            }
+            setIsInitialized(true);
+          }
         }
-      });
-    }
-  }, []);
+      } catch (error) {
+        console.error('Session initialization error:', error);
+        if (mounted) {
+          setShowSplash(false);
+          setIsInitialized(true);
+        }
+      }
+    };
+
+    // Add a timeout to hide splash screen if initialization takes too long
+    const splashTimeout = setTimeout(() => {
+      if (mounted) {
+        setShowSplash(false);
+        setIsInitialized(true);
+      }
+    }, 3000);
+
+    initializeSession();
+
+    return () => {
+      mounted = false;
+      clearTimeout(splashTimeout);
+    };
+  }, [navigate]);
 
   if (isEmailConfirmation) {
     return (
@@ -91,20 +123,22 @@ const AppContent = () => {
   );
 };
 
-// Fix: Wrap the entire app with the required providers, ensuring proper nesting
+// Wrap the entire app with error boundary and required providers
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <AuthProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AppContent />
-          </BrowserRouter>
-        </AuthProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <AuthProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <AppContent />
+            </BrowserRouter>
+          </AuthProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 
