@@ -71,19 +71,10 @@ const AppContent = () => {
       }
     };
 
-    // Add a timeout to hide splash screen if initialization takes too long
-    const splashTimeout = setTimeout(() => {
-      if (mounted) {
-        setShowSplash(false);
-        setIsInitialized(true);
-      }
-    }, 3000);
-
     initializeSession();
 
     return () => {
       mounted = false;
-      clearTimeout(splashTimeout);
     };
   }, [navigate]);
 
