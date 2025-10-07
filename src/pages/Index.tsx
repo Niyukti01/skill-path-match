@@ -1,6 +1,4 @@
-
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { HeroSection } from "@/components/HeroSection";
 import { Navbar } from "@/components/Navbar";
@@ -19,13 +17,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 const Index = () => {
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
   const { user } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user) {
-      navigate("/dashboard");
-    }
-  }, [user, navigate]);
 
   return (
     <div className="min-h-screen flex flex-col">

@@ -41,7 +41,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setIsAdmin(false);
         }
       } catch (err) {
-        console.error('Error checking admin status:', err);
         setIsAdmin(false);
       }
     };
@@ -57,7 +56,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       (event, session) => {
         if (!mounted) return;
         
-        console.log('Auth state change:', event);
         setSession(session);
         setUser(session?.user ?? null);
         
@@ -73,12 +71,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 .maybeSingle();
               
               if (error) {
-                console.error('Error fetching profile:', error);
+                // Profile fetch error - user can still use the app
+                setProfile(null);
               } else {
                 setProfile(profileData);
               }
             } catch (error) {
-              console.error('Error fetching profile:', error);
+              // Silent error - don't break user experience
+              setProfile(null);
             }
             setLoading(false);
           }, 0);
@@ -94,7 +94,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (!mounted) return;
       
       if (error) {
-        console.error('Error getting session:', error);
         setLoading(false);
         return;
       }
@@ -114,12 +113,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               .maybeSingle();
             
             if (profileError) {
-              console.error('Error fetching profile:', profileError);
+              setProfile(null);
             } else {
               setProfile(profileData);
             }
           } catch (error) {
-            console.error('Error fetching profile:', error);
+            setProfile(null);
           }
           setLoading(false);
         }, 0);
@@ -197,7 +196,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               .maybeSingle();
             
             if (!profile) {
-              console.error('Profile was not created for user:', data.user.id);
               toast({
                 title: "Warning",
                 description: "Account created but profile setup incomplete. Please contact support if you experience issues.",
@@ -205,7 +203,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               });
             }
           } catch (profileError) {
-            console.error('Error checking profile creation:', profileError);
+            // Silent error during profile verification
           }
         }, 1000);
 

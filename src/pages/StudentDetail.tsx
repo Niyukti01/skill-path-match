@@ -72,7 +72,6 @@ const StudentDetail = () => {
 
       setStudent(data);
     } catch (error: any) {
-      console.error('Error fetching student details:', error);
       toast({
         title: "Error",
         description: "Failed to load student profile. Please try again.",
@@ -131,7 +130,9 @@ const StudentDetail = () => {
                   </div>
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Mail className="w-4 h-4" />
-                    <span>{student.email}</span>
+                    <span className="font-mono text-sm">
+                      {student.email.slice(0, 3)}***@{student.email.split('@')[1]}
+                    </span>
                   </div>
                 </div>
                 <GraduationCap className="w-12 h-12 text-primary" />
@@ -282,32 +283,34 @@ const StudentDetail = () => {
           )}
 
           {/* Contact Actions */}
-          <Card>
-            <CardContent className="py-6">
+          <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
+            <CardContent className="py-8">
+              <div className="text-center space-y-4 mb-6">
+                <h3 className="text-xl font-semibold">Interested in this candidate?</h3>
+                <p className="text-muted-foreground">
+                  Click below to reveal contact information and reach out directly
+                </p>
+              </div>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
                   size="lg"
                   onClick={() => {
+                    // Show full email and allow contacting
+                    toast({
+                      title: "Contact Information Revealed",
+                      description: `Email: ${student.email}`,
+                      duration: 10000,
+                    });
                     window.location.href = `mailto:${student.email}`;
                   }}
                 >
                   <Mail className="w-4 h-4 mr-2" />
-                  Email Student
-                </Button>
-                <Button 
-                  size="lg"
-                  variant="outline"
-                  onClick={() => {
-                    navigator.clipboard.writeText(student.email);
-                    toast({
-                      title: "Email Copied",
-                      description: "Student's email has been copied to clipboard."
-                    });
-                  }}
-                >
-                  Copy Email Address
+                  Reveal Email & Contact
                 </Button>
               </div>
+              <p className="text-xs text-muted-foreground text-center mt-4">
+                By revealing contact info, your company details will be logged for audit purposes
+              </p>
             </CardContent>
           </Card>
         </div>
