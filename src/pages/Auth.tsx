@@ -10,6 +10,37 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { z } from "zod";
+
+// Input validation schemas
+const emailSchema = z.string().trim().email("Invalid email address").max(255, "Email must be less than 255 characters");
+
+const passwordSchema = z.string()
+  .min(8, "Password must be at least 8 characters long")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number");
+
+const nameSchema = z.string()
+  .trim()
+  .min(2, "Name must be at least 2 characters")
+  .max(100, "Name must be less than 100 characters")
+  .regex(/^[a-zA-Z\s'-]+$/, "Name can only contain letters, spaces, hyphens, and apostrophes");
+
+const loginSchema = z.object({
+  email: emailSchema,
+  password: z.string().min(1, "Password is required")
+});
+
+const registerSchema = z.object({
+  name: nameSchema,
+  email: emailSchema,
+  password: passwordSchema,
+  confirmPassword: z.string()
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"]
+});
 
 const Auth = () => {
   const { signUp, signIn } = useAuth();
@@ -37,88 +68,77 @@ const Auth = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    if (type === "register") {
-      // Validate name
-      if (!formData.name.trim()) {
-        toast({
-          title: "Validation Error",
-          description: "Name is required",
-          variant: "destructive"
+    try {
+      if (type === "register") {
+        // Validate registration data using Zod
+        const validationResult = registerSchema.safeParse(formData);
+        
+        if (!validationResult.success) {
+          const firstError = validationResult.error.errors[0];
+          toast({
+            title: "Validation Error",
+            description: firstError.message,
+            variant: "destructive"
+          });
+          setIsSubmitting(false);
+          return;
+        }
+        
+        const result = await signUp(
+          validationResult.data.email,
+          validationResult.data.password,
+          {
+            name: validationResult.data.name,
+            userType
+          }
+        );
+        
+        if (!result.error) {
+          toast({
+            title: "Success!",
+            description: "Account created successfully. You can now sign in.",
+          });
+          // Switch to login tab after successful registration
+          setActiveTab("login");
+          setFormData(prev => ({ ...prev, password: "", confirmPassword: "" }));
+        }
+      } else {
+        // Validate login data using Zod
+        const validationResult = loginSchema.safeParse({
+          email: formData.email,
+          password: formData.password
         });
-        return;
-      }
+        
+        if (!validationResult.success) {
+          const firstError = validationResult.error.errors[0];
+          toast({
+            title: "Validation Error",
+            description: firstError.message,
+            variant: "destructive"
+          });
+          setIsSubmitting(false);
+          return;
+        }
 
-      // Validate email
-      if (!formData.email.trim()) {
-        toast({
-          title: "Validation Error",
-          description: "Email is required",
-          variant: "destructive"
-        });
-        return;
+        const { error } = await signIn(
+          validationResult.data.email,
+          validationResult.data.password
+        );
+        
+        if (!error) {
+          navigate("/dashboard");
+        }
       }
-
-      // Validate password
-      if (formData.password.length < 6) {
-        toast({
-          title: "Validation Error",
-          description: "Password must be at least 6 characters long",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      if (formData.password !== formData.confirmPassword) {
-        toast({
-          title: "Password mismatch",
-          description: "Please make sure both passwords match.",
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      const result = await signUp(formData.email.trim(), formData.password, {
-        name: formData.name.trim(),
-        userType
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive"
       });
-      
-      if (!result.error) {
-        toast({
-          title: "Success!",
-          description: "Account created successfully. You can now sign in.",
-        });
-        // Switch to login tab after successful registration
-        setActiveTab("login");
-        setFormData(prev => ({ ...prev, password: "", confirmPassword: "" }));
-      }
-    } else {
-      // Validate login fields
-      if (!formData.email.trim()) {
-        toast({
-          title: "Validation Error",
-          description: "Email is required",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      if (!formData.password) {
-        toast({
-          title: "Validation Error",
-          description: "Password is required",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      const { error } = await signIn(formData.email.trim(), formData.password);
-      
-      if (!error) {
-        navigate("/dashboard");
-      }
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    setIsSubmitting(false);
   };
 
   return (

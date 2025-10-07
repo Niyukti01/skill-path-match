@@ -39,7 +39,6 @@ const Students = () => {
   useEffect(() => {
     const filtered = students.filter(student =>
       student.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.skills?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.goals?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -99,7 +98,7 @@ const Students = () => {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input
-                placeholder="Search by name, email, skills, or goals..."
+                placeholder="Search by name, skills, or goals..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -143,7 +142,9 @@ const Students = () => {
                         {student.email && (
                           <div className="flex items-center gap-2 text-sm">
                             <Mail className="w-4 h-4 text-muted-foreground" />
-                            <span className="truncate">{student.email}</span>
+                            <span className="truncate text-muted-foreground italic">
+                              Email available in detail view
+                            </span>
                           </div>
                         )}
                         

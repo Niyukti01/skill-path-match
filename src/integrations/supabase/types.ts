@@ -215,10 +215,6 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
-      get_current_user_role: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
       get_recent_logins: {
         Args: { days_back?: number }
         Returns: {
@@ -256,6 +252,10 @@ export type Database = {
       }
       is_company: {
         Args: { user_uuid?: string }
+        Returns: boolean
+      }
+      is_company_user: {
+        Args: { _user_id?: string }
         Returns: boolean
       }
       log_communication_event: {
